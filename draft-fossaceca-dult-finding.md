@@ -10,10 +10,6 @@ consensus: true
 v: 3
 area: "Security"
 workgroup: "Detecting Unwanted Location Trackers"
-keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
 venue:
   group: "Detecting Unwanted Location Trackers"
   type: "Working Group"
@@ -24,8 +20,13 @@ venue:
 
 author:
  -
+    fullname: "Christine Fossaceca"
+    organization: Microsoft
+    email: "cfossaceca@microsoft.com"
+    
+ -
     fullname: "Eric Rescorla"
-    organization: Your Organization Here
+    organization: Windy Hill Systems, LLC
     email: "ekr@rtfm.com"
 
 normative:
