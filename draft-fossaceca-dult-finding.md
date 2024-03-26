@@ -23,7 +23,7 @@ author:
     fullname: "Christine Fossaceca"
     organization: Microsoft
     email: "cfossaceca@microsoft.com"
-    
+
  -
     fullname: "Eric Rescorla"
     organization: Windy Hill Systems, LLC
