@@ -93,7 +93,8 @@ This document defines a cryptographic reporting and finding protocol
 which is intended to minimize these privacy risks. It is intended
 to work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
-detection of unwanted tracking tags.
+detection of unwanted tracking tags. This protocol design is based
+[TODO: Airtags, BlindMy]
 
 # Conventions and Definitions
 
@@ -101,6 +102,37 @@ detection of unwanted tracking tags.
 
 Section 1.2 of {{I-D.detecting-unwanted-location-trackers}} provides
 definitions of the various system components.
+
+
+# Protocol Overview
+
+~~~~
+[TODO: Add Figure]
+~~~~
+{: #protocol-overview title="Protocol Overview"}
+
+{{protocol-overview}} provides an overall view of the protocol.
+
+As part of the setup phase (not shown) the accessory and
+owning device are paired, establishing a shared key `SK`
+which is known to both the accessory and the owning device.
+The rest of the protocol proceeeds as follows.
+
+* The accessory periodically sends out an advertisement which contains
+an ephemeral public key `Y_i` where `i` is the epoch the key is valid
+for (e.g., a one hour window). `Y_i` and its corresponding private key
+`X_i` are generated in a deterministic fashion from `SK` and the epoch
+`i` (conceptually as a `X_i = PRF(SK, i)`).
+
+* In order to report an accessory's location at time `i` a non-owning
+device encrypts it under `Y_i` and transmits the pair
+`( E(Y_i, location), Y_i )` to the central service.
+
+* In order to locate an accessory at time `i`, the owner uses `SK` to
+compute `(X_i, Y_i)` and then sends `Y_i` to the central service.
+The central service responds with all the reports it has for `Y_i`,
+and the owner decrypts them with `X_i`.
+
 
 # Security Considerations
 
