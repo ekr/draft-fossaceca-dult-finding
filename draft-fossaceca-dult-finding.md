@@ -36,20 +36,71 @@ informative:
 
 --- abstract
 
-TODO Abstract
+Lightweight location tracking tags are in wide use to allow users
+to locate items. These tags function as a component of a crowdsourced
+tracking network in which devices belonging to other network
+users (e.g., phones) report which
+tags they see and their location, thus allowing the owner of the
+tag to determine where their tag was most recently seen. This
+document defines the protocol by which devices report tags
+they have seen and by which owners look up their location.
 
 
 --- middle
 
 # Introduction
 
-TODO Introduction
+Lightweight location tracking tags are in wide use to allow users to
+locate items. These tags function as a component of a crowdsourced
+tracking network in which devices belonging to other network users
+(e.g., phones) report on the location of tags they have seen.
+At a high level, this works as follows:
 
+- Tags ("accessories") broadcast an advertisement payload containing
+  accessory-specific information. The payload also indicates whether
+  the accessory is separated from its owner and thus potentially lost.
+
+- Devices belonging to other users ("non-owner devices")
+  observe those payloads and if the payload is in a separated
+  mode, reports its location to some central service.
+
+- The owner queries the central service for the location of their
+  accessory.
+
+A naive implementation of this design exposes users to considerable
+privacy risk. In particular:
+
+* If accessories simply have a fixed identifier that is reported back
+  to the tracking network, then the central server is able to track
+  any accessory without the user's assistance, which is clearly
+  undesirable.
+
+* An attacker can surreptitiously plant an accessory on a target
+  and thus track them by tracking their "own" accessory.
+
+
+{{security-considerations}} provides more detailed definition of the
+desired security privacy properties, but briefly, we would like to
+have a system in which:
+
+1. Nobody other than the owner of an accessory would be able to learn
+anything about the location of a given accessory.
+
+1. It is possible to detect when an accessory is being used to track
+you.
+
+This document defines a cryptographic reporting and finding protocol
+which is intended to minimize these privacy risks. It is intended
+to work in concert with the requirements defined in
+{{!I-D.detecting-unwanted-location-trackers}}, which facilitate
+detection of unwanted tracking tags.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
+Section 1.2 of {{I-D.detecting-unwanted-location-trackers}} provides
+definitions of the various system components.
 
 # Security Considerations
 
