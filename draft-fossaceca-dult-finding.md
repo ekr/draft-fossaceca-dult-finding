@@ -109,9 +109,9 @@ definitions of the various system components.
 ~~~~
 [TODO: Add Figure]
 ~~~~
-{: #protocol-overview title="Protocol Overview"}
+{: #fig-protocol-overview title="Protocol Overview"}
 
-{{protocol-overview}} provides an overall view of the protocol.
+{{fig-protocol-overview}} provides an overall view of the protocol.
 
 As part of the setup phase (not shown) the accessory and
 owning device are paired, establishing a shared key `SK`
@@ -132,6 +132,7 @@ device encrypts it under `Y_i` and transmits the pair
 compute `(X_i, Y_i)` and then sends `Y_i` to the central service.
 The central service responds with all the reports it has for `Y_i`,
 and the owner decrypts them with `X_i`.
+
 
 
 # Security Considerations
