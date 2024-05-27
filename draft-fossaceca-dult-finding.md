@@ -181,10 +181,24 @@ MASQUE {{?RFC9298}}.
 
 ## Non-compliant Accessories
 
+The detection mechanisms described in
+{{I-D.detecting-unwanted-location-trackers}} depend on correct
+behavior from the tracker. For instance, {{Section 3.5.1 of
+I-D.detecting-unwanted-location-trackers}} requires that
+accessories use a rotation period of 24 hours when in
+the "separated" state:
 
+   When in a separated state, the accessory SHALL rotate its address
+   every 24 hours.  This duration allows a platform's unwanted
+   tracking algorithms to detect that the same accessory is in
+   proximity for some period of time, when the owner is not in
+   physical proximity.
 
-
-
+However, if an attacker were to make their own accessory that was
+generated the right beacon messages or modify an existing one, they
+could cause it to rotate the MAC address more frequently, thus
+evading detection algorithms. The attestation mechanism described
+in Section [TODO] is intended to mitigate this attack.
 
 
 # Security Considerations
