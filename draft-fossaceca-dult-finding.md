@@ -206,13 +206,3 @@ This document has no IANA actions.
 TODO acknowledge.
 
 
-# References
-
-TODO References
-
-BlindMy
-https://petsymposium.org/popets/2023/popets-2023-0006.pdf
-
-Toward a Secure Crowdsourced Location Tracking System
-https://dl.acm.org/doi/10.1145/3448300.3467821
-
