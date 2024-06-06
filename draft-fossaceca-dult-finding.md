@@ -83,18 +83,33 @@ privacy risk. In particular:
 desired security privacy properties, but briefly, we would like to
 have a system in which:
 
-1. Nobody other than the owner of an accessory would be able to learn
+- Nobody other than the owner of an accessory would be able to learn
 anything about the location of a given accessory.
 
-1. It is possible to detect when an accessory is being used to track
+- It is possible to detect when an accessory is being used to track
 you.
+
+- It is not possible for accessories that do not adhere to the protocol to use crowdsource network protocol.
+
+- It is not possible for unverified accessories to use the crowdsource network protocol.
 
 This document defines a cryptographic reporting and finding protocol
 which is intended to minimize these privacy risks. It is intended
 to work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
-detection of unwanted tracking tags. This protocol design is based
-[TODO: Airtags, BlindMy]
+detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today.
+
+
+
+TODO list out all existing BLE tags like samsung etc.
+- (Apple Airtags) https://www.apple.com/airtag/
+TODO: Airtags, BlindMy
+
+# Motivations
+
+
+
+
 
 # Conventions and Definitions
 
@@ -102,6 +117,10 @@ detection of unwanted tracking tags. This protocol design is based
 
 Section 1.2 of {{I-D.detecting-unwanted-location-trackers}} provides
 definitions of the various system components.
+
+Accessory: This is the device which will be tracked. It is assumed to lack direct internet access and GPS, but will possess Bluetooth Low Energy capabilities, which it uses to send advertisement messages.
+
+Advertisement: This is the message that is sent over the BLE Protocol
 
 
 # Protocol Overview
@@ -113,10 +132,42 @@ definitions of the various system components.
 
 {{fig-protocol-overview}} provides an overall view of the protocol.
 
-As part of the setup phase (not shown) the accessory and
+In this protocol, the accessory communicates to networked devices (such as phones) solely via Bluetooth  (TODO, should we generalize this for UWB), while networked devices communicate to the centralized service. Only during the setup phase is the owning device able to act as a relay between the accessory and the central service.
+
+We assume that during the setup phase, the communication channel between the owning device and the central service is authenticated and end-to-end encrypted.
+
+In this implementation,
+
+- All parties agree on an elliptic curve group with a generator,
+a secure Message Authentication Algorithm, and a hashing
+function H.
+
+
+TODO - unsure if the database of used/ unused serial values in a central is really that secure, or how it can be abused?
+
+- The server knows a key pair (KS , PS ), where the public key
+PS is known to all parties. In addition, the server has a private
+symmetric encryption key Kserial. Finally, the server also
+maintains a database of used serial values DSerial.
+
+
+
+- Each Tracking Device TDj has been initialized with a unique
+serial number and a tag constructed by a secure Message
+Authentication Code (MAC) algorithm applied to the serial,
+so that each TDj has in its internal storage:
+
+(Serialj, Tj) = MACkserial(Serialj)
+
+
+During the setup phase, the accessory and owning device leverage partial blind signatures to authenticate the accessory with the central service.
+
+
+
+As part of the setup phase (described above) the accessory and
 owning device are paired, establishing a shared key `SK`
 which is known to both the accessory and the owning device.
-The rest of the protocol proceeeds as follows.
+The rest of the protocol proceeds as follows.
 
 * The accessory periodically sends out an advertisement which contains
 an ephemeral public key `Y_i` where `i` is the epoch the key is valid
@@ -132,6 +183,8 @@ device encrypts it under `Y_i` and transmits the pair
 compute `(X_i, Y_i)` and then sends `Y_i` to the central service.
 The central service responds with all the reports it has for `Y_i`,
 and the owner decrypts them with `X_i`.
+
+
 
 
 
@@ -151,3 +204,15 @@ This document has no IANA actions.
 {:numbered="false"}
 
 TODO acknowledge.
+
+
+# References
+
+TODO References
+
+BlindMy
+https://petsymposium.org/popets/2023/popets-2023-0006.pdf
+
+Toward a Secure Crowdsourced Location Tracking System
+https://dl.acm.org/doi/10.1145/3448300.3467821
+
