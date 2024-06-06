@@ -44,6 +44,22 @@ informative:
        -
          ins: Ellis Fenske
 
+  GMCKV21:
+       title: "Toward a secure crowdsourced location tracking system"
+       date: 2021
+       target: https://dl.acm.org/doi/10.1145/3448300.3467821
+       author:
+       -
+         ins: Chinmay Garg
+       -
+         ins: Aravind Machiry
+       -
+         ins: Andrea Continella
+       -
+         ins: Christopher Kruegel
+       -
+         ins: Giovanni Vigna
+
 --- abstract
 
 Lightweight location tracking tags are in wide use to allow users
@@ -198,6 +214,7 @@ and the owner decrypts them with `X_i`.
 # Dummy Citations
 
 {{BlindMy}}
+{{GMCKV21}}{
 
 
 # Security Considerations
