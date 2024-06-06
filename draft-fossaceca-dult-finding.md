@@ -32,7 +32,17 @@ author:
 normative:
 
 informative:
-
+  BlindMy:
+       title: "Blind My — An Improved Cryptographic Protocol to Prevent Stalking in Apple’s Find My Network"
+       date: 2023
+       target: https://petsymposium.org/popets/2023/popets-2023-0006.pdf
+       author:
+       -
+         ins: Travis Mayberry
+       -
+         ins: Erik-Oliver Blass
+       -
+         ins: Ellis Fenske
 
 --- abstract
 
@@ -185,7 +195,9 @@ The central service responds with all the reports it has for `Y_i`,
 and the owner decrypts them with `X_i`.
 
 
+# Dummy Citations
 
+{{BlindMy}}
 
 
 # Security Considerations
