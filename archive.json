@@ -1,0 +1,132 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-06-30T00:23:46.353094+00:00",
+  "repo": "ekr/draft-fossaceca-dult-finding",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 2,
+      "id": "I_kwDOLlgmts6MOq2V",
+      "title": "[INQUIRY] Non Compliant Trackers",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/issues/2",
+      "state": "OPEN",
+      "author": "zoracon",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "(This is Alexis H. from EFF) \r\n\r\nI figure this was the best way to leave a comment or question\r\n\r\n>RE: However, if an attacker were to make their own accessory that was generated the right beacon messages or modify an existing one, they could cause it to rotate the MAC address more frequently, thus evading detection algorithms. The attestation mechanism described in Section [TODO] is intended to mitigate this attack.\r\n\r\nCan we specifically state with this draft that non compliant trackers be locked out from being able to utilize the crowd sourced FindMy networks? We can't stop more sophisticated trackers, but we can at least stop them from being able to use this network. \r\n\r\nForgive me if this is addressed somewhere else.\r\n",
+      "createdAt": "2024-06-14T06:49:48Z",
+      "updatedAt": "2024-06-14T13:06:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "OWNER",
+          "body": "Yes, that's the objective of the techniques to be described in [TODO]. It's TBD exactly what those techniques are and how well they will work.",
+          "createdAt": "2024-06-14T13:06:11Z",
+          "updatedAt": "2024-06-14T13:06:11Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOLlgmts6MOr2G",
+      "title": "[COMMENT] Data Retention from Central Servers",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/issues/3",
+      "state": "OPEN",
+      "author": "zoracon",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": ">If the central server is able to learn the identity of the device reporting an accessory or the identity of the owner requesting the location of an accessory, then it can infer information about that accessory's behavior.\r\n\r\nOutlining a retention period from the central server could also help mitigate this issue with the listed technical solutions (Oblivious HTTP) in the doc. It could also help limit dragnet warrants by law enforcement.\r\n",
+      "createdAt": "2024-06-14T06:52:19Z",
+      "updatedAt": "2024-06-14T13:23:02Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "ekr",
+          "authorAssociation": "OWNER",
+          "body": "I agree that this is a good recommendation. How much it helps depends on the threat model. I.e., if the attacker is the central server, they can claim to delete the data but not actually do so. If the central server is trying to minimize its attack surface from outside then this can reduce it significantly.",
+          "createdAt": "2024-06-14T13:23:01Z",
+          "updatedAt": "2024-06-14T13:23:01Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOLlgmts5wYdR2",
+      "title": "Ekr initial pass",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/1",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-05-23T21:20:04Z",
+      "updatedAt": "2024-05-23T21:30:03Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "6df87660b23f14c7f2ce1e291437e37fcd5c2064",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "ekr_initial_pass",
+      "headRefOid": "00ceeccd4bf2efdaa2b614b5a248add3b7006289",
+      "closedAt": "2024-05-23T21:30:02Z",
+      "mergedAt": "2024-05-23T21:30:02Z",
+      "mergedBy": "cfossace",
+      "mergeCommit": {
+        "oid": "45f9552248bb78dff56debf1d9a68760f51720bd"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}

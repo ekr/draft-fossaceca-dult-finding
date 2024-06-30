@@ -1,0 +1,214 @@
+
+
+
+
+Detecting Unwanted Location Trackers                        C. Fossaceca
+Internet-Draft                                                 Microsoft
+Intended status: Informational                               E. Rescorla
+Expires: 24 November 2024                        Windy Hill Systems, LLC
+                                                             23 May 2024
+
+
+                         Finding Tracking Tags
+                  draft-fossaceca-dult-finding-latest
+
+Abstract
+
+   Lightweight location tracking tags are in wide use to allow users to
+   locate items.  These tags function as a component of a crowdsourced
+   tracking network in which devices belonging to other network users
+   (e.g., phones) report which tags they see and their location, thus
+   allowing the owner of the tag to determine where their tag was most
+   recently seen.  This document defines the protocol by which devices
+   report tags they have seen and by which owners look up their
+   location.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://ekr.github.io/draft-fossaceca-dult-finding/draft-fossaceca-
+   dult-finding.html.  Status information for this document may be found
+   at https://datatracker.ietf.org/doc/draft-fossaceca-dult-finding/.
+
+   Discussion of this document takes place on the Detecting Unwanted
+   Location Trackers Working Group mailing list (mailto:unwanted-
+   trackers@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/unwanted-trackers/.
+   Subscribe at https://www.ietf.org/mailman/listinfo/unwanted-
+   trackers/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/ekr/draft-fossaceca-dult-finding.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 24 November 2024.
+
+Copyright Notice
+
+   Copyright (c) 2024 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  Protocol Overview
+   4.  Security Considerations
+   5.  IANA Considerations
+   6.  Normative References
+   Acknowledgments
+   Authors' Addresses
+
+1.  Introduction
+
+   Lightweight location tracking tags are in wide use to allow users to
+   locate items.  These tags function as a component of a crowdsourced
+   tracking network in which devices belonging to other network users
+   (e.g., phones) report on the location of tags they have seen.  At a
+   high level, this works as follows:
+
+   *  Tags ("accessories") broadcast an advertisement payload containing
+      accessory-specific information.  The payload also indicates
+      whether the accessory is separated from its owner and thus
+      potentially lost.
+
+   *  Devices belonging to other users ("non-owner devices") observe
+      those payloads and if the payload is in a separated mode, reports
+      its location to some central service.
+
+   *  The owner queries the central service for the location of their
+      accessory.
+
+   A naive implementation of this design exposes users to considerable
+   privacy risk.  In particular:
+
+   *  If accessories simply have a fixed identifier that is reported
+      back to the tracking network, then the central server is able to
+      track any accessory without the user's assistance, which is
+      clearly undesirable.
+
+   *  An attacker can surreptitiously plant an accessory on a target and
+      thus track them by tracking their "own" accessory.
+
+   Section 4 provides more detailed definition of the desired security
+   privacy properties, but briefly, we would like to have a system in
+   which:
+
+   1.  Nobody other than the owner of an accessory would be able to
+       learn anything about the location of a given accessory.
+
+   2.  It is possible to detect when an accessory is being used to track
+       you.
+
+   This document defines a cryptographic reporting and finding protocol
+   which is intended to minimize these privacy risks.  It is intended to
+   work in concert with the requirements defined in
+   [I-D.detecting-unwanted-location-trackers], which facilitate
+   detection of unwanted tracking tags.  This protocol design is based
+   [TODO: Airtags, BlindMy]
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Section 1.2 of [I-D.detecting-unwanted-location-trackers] provides
+   definitions of the various system components.
+
+3.  Protocol Overview
+
+   [TODO: Add Figure]
+
+                        Figure 1: Protocol Overview
+
+   Figure 1 provides an overall view of the protocol.
+
+   As part of the setup phase (not shown) the accessory and owning
+   device are paired, establishing a shared key SK which is known to
+   both the accessory and the owning device.  The rest of the protocol
+   proceeeds as follows.
+
+   *  The accessory periodically sends out an advertisement which
+      contains an ephemeral public key Y_i where i is the epoch the key
+      is valid for (e.g., a one hour window).  Y_i and its corresponding
+      private key X_i are generated in a deterministic fashion from SK
+      and the epoch i (conceptually as a X_i = PRF(SK, i)).
+
+   *  In order to report an accessory's location at time i a non-owning
+      device encrypts it under Y_i and transmits the pair ( E(Y_i,
+      location), Y_i ) to the central service.
+
+   *  In order to locate an accessory at time i, the owner uses SK to
+      compute (X_i, Y_i) and then sends Y_i to the central service.  The
+      central service responds with all the reports it has for Y_i, and
+      the owner decrypts them with X_i.
+
+4.  Security Considerations
+
+   TODO Security
+
+5.  IANA Considerations
+
+   This document has no IANA actions.
+
+6.  Normative References
+
+   [I-D.detecting-unwanted-location-trackers]
+              Ledvina, B., Eddinger, Z., Detwiler, B., and S. P.
+              Polatkan, "Detecting Unwanted Location Trackers", Work in
+              Progress, Internet-Draft, draft-detecting-unwanted-
+              location-trackers-01, 20 December 2023,
+              <https://datatracker.ietf.org/doc/html/draft-detecting-
+              unwanted-location-trackers-01>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Authors' Addresses
+
+   Christine Fossaceca
+   Microsoft
+   Email: cfossaceca@microsoft.com
+
+
+   Eric Rescorla
+   Windy Hill Systems, LLC
+   Email: ekr@rtfm.com
