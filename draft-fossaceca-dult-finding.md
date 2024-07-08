@@ -171,6 +171,9 @@ privacy risk. In particular:
   any accessory without the user's assistance, which is clearly
   undesirable.
 
+* Any attacker who can guess a tag ID can query the central server
+  for its location.
+
 * An attacker can surreptitiously plant an accessory on a target
   and thus track them by tracking their "own" accessory.
 
@@ -181,6 +184,7 @@ have a system in which:
 
 - Nobody other than the owner of an accessory would be able to learn
 anything about the location of a given accessory.
+
 
 - It is possible to detect when an accessory is being used to track
 you.
@@ -494,6 +498,70 @@ compute the hash of the desired public key `Y`<sub>i</sub>. The owner `OD` sends
 (4) For each report, `OD` finds the public key for the report by its hash, and uses the corresponding private key alongside the ephemeral public key included in the report to decrypt the encrypted payload and recover the timestamp, confidence, and location data associated with the report.
 
 
+This design provides substantially improved privacy properties
+over a naive design:
+
+1. Nobody but the owner can learn the reported location of an
+   accessory because it is encrypted under `Y_i`. This includes
+   the central service, which just sees encrypted reports.
+
+1. It is not possible to correlate the public keys broadcast
+   across multiple epochs without knowing the shared key `SK`,
+   which is only know to the owner. However, an observer who
+   sees multiple beacons within the same epoch can correlate
+   them, as they will have the same `Y_i`. However, fast
+   rotation also makes it more difficult to detect unwanted
+   tracking, which relies on multiple observations of the
+   same identifier over time.
+
+However, there are a number of residual privacy threats, as described below.
+
+## Reporting Device Leakage
+
+If the central server is able to learn the identity of the device
+reporting an accessory or the identity of the owner requesting the location
+of an accessory, then it can infer information about that accessory's
+behavior. For instance:
+
+- If device A reports accessories X and Y owned by different users and
+  they both query for their devices, then the central server
+  may learn that those users were in the same place, or at least
+  their accessories were.
+
+- If devices A and B both report tag X, then the server learns that
+  A and B were in the same place.
+
+- If the central server is able to learn where a reporting device
+  is (e.g., by IP address) and then the user queries for that
+  accessory, then the server can infer information about where
+  the user was, or at least where they lost the accessory.
+
+These issues can be mitigated by concealing the identity and/or
+IP address of network elements communicating with the central
+server using techniques such as Oblivious HTTP {{?RFC9458}} or
+MASQUE {{?RFC9298}}.
+
+
+## Non-compliant Accessories
+
+The detection mechanisms described in
+{{I-D.detecting-unwanted-location-trackers}} depend on correct
+behavior from the tracker. For instance, {{Section 3.5.1 of
+I-D.detecting-unwanted-location-trackers}} requires that
+accessories use a rotation period of 24 hours when in
+the "separated" state:
+
+   When in a separated state, the accessory SHALL rotate its address
+   every 24 hours.  This duration allows a platform's unwanted
+   tracking algorithms to detect that the same accessory is in
+   proximity for some period of time, when the owner is not in
+   physical proximity.
+
+However, if an attacker were to make their own accessory that was
+generated the right beacon messages or modify an existing one, they
+could cause it to rotate the MAC address more frequently, thus
+evading detection algorithms. The attestation mechanism described
+in Section [TODO] is intended to mitigate this attack.
 
 
 # Security Considerations
