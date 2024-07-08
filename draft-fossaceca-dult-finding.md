@@ -225,16 +225,13 @@ detection of unwanted tracking tags. This protocol design is based on existing a
 
 This work has been inspired by the negative security and privacy implications that were introduced by lightweight location tracking tags, and defined in part by {{!I-D.detecting-unwanted-location-trackers}}. The full threat model is described in detail in {{DultDoc4}}, however, a significant element of the threat model lies in part with the security of the Crowdsourced Network, which will be discussed in detail here.
 
-The Crowdsourced Network has unwittingly provided stalkers with a means to anonymously upload and download location reports from BLE trackers. Thus, this document outlines the requirements and responsibilities of the Crowdsourced Network to verify the authenticity of the participants, while also preserving user privacy.
+In addition to its designed uses, the Crowdsourced Network also provided stalkers with a means to anonymously upload and download location reports from BLE trackers. Thus, this document outlines the requirements and responsibilities of the Crowdsourced Network to verify the authenticity of the participants, while also preserving user privacy.
 
+- First, the Crowdsourced Network should to ensure that only authentic Finding Devices are sending reports to the Crowdsourced Network, and this should occur via an authenticated and encrypted channel. This will help prevent malicious actors from interfering with location reporting services.
 
-- First, the Crowdsourced Network has a responsibility to ensure that only authentic Finding Devices are sending reports to the Crowdsourced Network, and this should occur via an authenticated and encrypted channel. This will help prevent malicious actors from interfering with location reporting services.
+- Second, the Crowdsourced Network should ensure that only authorized Owner Devices are able to download location reports, and this should occur via an authenticated and encrypted channel. This will prevent malicious actors from unauthorized access of location data.
 
-- Second, the Crowdsourced Network has a responsibility to ensure that only authorized Owner Devices are able to download location reports, and this should occur via an authenticated and encrypted channel. This will prevent malicious actors from unauthorized access of location data.
-
-- Third, the Crowdsourced Network must follow basic security principles, such as
-  - Storing location reports in an encrypted manner
-  - Limiting location report data storage to 7 days or less
+- Third, the Crowdsourced Network must follow basic security principles, such as storing location reports in an encrypted manner
 
   *(The benefits of this requirement are self explanatory.)*
 
