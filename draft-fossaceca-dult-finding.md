@@ -162,6 +162,11 @@ they have seen and by which owners look up their location.
 
 # Introduction
 
+DISCLAIMER: This draft is work-in-progress and has not yet seen significant (or
+really any) security analysis. It should not be used as a basis for building
+production systems. This published version of the draft has been designated
+an "implementation draft" for testing and interop purposes.
+
 Lightweight location tracking tags are a mechanism by which users can track their personal items. These tags function as a component of a crowdsourced
 tracking network in which devices belonging to other network users
 (e.g., phones) report on the location of tags they have seen.
