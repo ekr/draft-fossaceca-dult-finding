@@ -85,7 +85,7 @@ Table of Contents
      4.2.  Non-compliant Accessories
        4.2.1.  Rate Limiting and Attestation
    5.  Protocol Definition
-     5.1.  System Stages
+     5.1.  Sysstem Stages
      5.2.  General Protocol Infrastructure Properties
      5.3.  Partial Blind Signature Scheme
      5.4.  Initial Pairing / Accessory Setup
@@ -420,7 +420,7 @@ o          o                  │ │              │ │                 ~- . 
    This section provides a detailed description of the DULT Finding
    Protocol.
 
-5.1.  System Stages
+5.1.  Sysstem Stages
 
    The there are 5 stages that will be outlined, taking into account
    elements from both [BlindMy] and [GMCKV21].  These stages are as
@@ -508,6 +508,8 @@ o          o                  │ │              │ │                 ~- . 
       +------------------------------------------------------------+
 
                                  Table 1
+
+   Text adapted from Section 2.5 of [BlindMy].
 
 5.4.  Initial Pairing / Accessory Setup
 
