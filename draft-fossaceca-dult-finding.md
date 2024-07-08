@@ -131,6 +131,21 @@ informative:
        -
          ins: Erik Rye
 
+  Samsung:
+       title: "Privacy Analysis of Samsung’s Crowd-Sourced Bluetooth Location Tracking System"
+       date: 2023
+       target: https://www.usenix.org/system/files/sec23winter-prepub-498-yu.pdf
+       author:
+       -
+         ins: Tingfeng Yu
+       -
+         ins: James Henderson
+       -
+         ins: Alwen Tiu
+       -
+         ins: Thomas Haines
+
+
 --- abstract
 
 Lightweight location tracking tags are in wide use to allow users
@@ -222,13 +237,15 @@ The Crowdsourced Network has unwittingly provided stalkers with a means to anony
 
 ## Existing Protocols
 
+There are a variety of different products on the market today that leverage a Crowdsourced Network for location tracking. Currently, each manufacturer has designed its own implementation and product.
 
+These include:
 
+* Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
 
+* Samsung and the SmartTag, as described in {{Samsung}}
 
-TODO list out all existing BLE tags like samsung etc.
-- (Apple Airtags) https://www.apple.com/airtag/
-TODO: Airtags, BlindMy
+* Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
 
 
 
@@ -238,7 +255,6 @@ TODO: Airtags, BlindMy
 
 Section 1.2 of {{I-D.detecting-unwanted-location-trackers}} provides
 definitions of the various system components.
-
 
 
 Accessory (ACC): This is the device which will be tracked. It is assumed to lack direct internet access and GPS, but will possess Bluetooth Low Energy capabilities, which it uses to send advertisement messages. The accessory protocol is defined in {{DultDoc3}}.
