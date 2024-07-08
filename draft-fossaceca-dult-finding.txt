@@ -81,26 +81,28 @@ Table of Contents
      2.2.  Existing Protocols
    3.  Conventions and Definitions
    4.  Protocol Overview
-     4.1.  High Level Protocol
-     4.2.  General Protocol Infrastructure Properties
-     4.3.  Partial Blind Signature Scheme
-     4.4.  Initial Pairing / Accessory Setup
-       4.4.1.  Authenticity Verification
-       4.4.2.  Key Generation and Signing with Partial Blind
+     4.1.  Reporting Device Leakage
+     4.2.  Non-compliant Accessories
+       4.2.1.  Rate Limiting and Attestation
+   5.  Protocol Definition
+     5.1.  System Stages
+     5.2.  General Protocol Infrastructure Properties
+     5.3.  Partial Blind Signature Scheme
+     5.4.  Initial Pairing / Accessory Setup
+       5.4.1.  Authenticity Verification
+       5.4.2.  Key Generation and Signing with Partial Blind
                Signatures
-     4.5.  Accessory Behavior
-       4.5.1.  Accessory in Nearby Owner Mode
-       4.5.2.  Accessory in Separated (Lost) Mode
-     4.6.  Finder Device creates a Location Report
-     4.7.  Owner Device queries the Crowdsourced Network
-     4.8.  Reporting Device Leakage
-     4.9.  Non-compliant Accessories
-   5.  Security Considerations
-   6.  Privacy Considerations
-   7.  IANA Considerations
-   8.  References
-     8.1.  Normative References
-     8.2.  Informative References
+     5.5.  Accessory Behavior
+       5.5.1.  Accessory in Nearby Owner Mode
+       5.5.2.  Accessory in Separated (Lost) Mode
+     5.6.  Finder Device creates a Location Report
+     5.7.  Owner Device queries the Crowdsourced Network
+   6.  Security Considerations
+   7.  Privacy Considerations
+   8.  IANA Considerations
+   9.  References
+     9.1.  Normative References
+     9.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -145,7 +147,7 @@ Table of Contents
    *  An attacker can surreptitiously plant an accessory on a target and
       thus track them by tracking their "own" accessory.
 
-   Section 5 provides more detailed definition of the desired security
+   Section 6 provides more detailed definition of the desired security
    privacy properties, but briefly, we would like to have a system in
    which:
 
@@ -182,30 +184,28 @@ Table of Contents
    the threat model lies in part with the security of the Crowdsourced
    Network, which will be discussed in detail here.
 
-   The Crowdsourced Network has unwittingly provided stalkers with a
-   means to anonymously upload and download location reports from BLE
-   trackers.  Thus, this document outlines the requirements and
-   responsibilities of the Crowdsourced Network to verify the
-   authenticity of the participants, while also preserving user privacy.
+   In addition to its designed uses, the Crowdsourced Network also
+   provided stalkers with a means to anonymously upload and download
+   location reports from BLE trackers.  Thus, this document outlines the
+   requirements and responsibilities of the Crowdsourced Network to
+   verify the authenticity of the participants, while also preserving
+   user privacy.
 
-   *  First, the Crowdsourced Network has a responsibility to ensure
-      that only authentic Finding Devices are sending reports to the
-      Crowdsourced Network, and this should occur via an authenticated
-      and encrypted channel.  This will help prevent malicious actors
-      from interfering with location reporting services.
+   *  First, the Crowdsourced Network should to ensure that only
+      authentic Finding Devices are sending reports to the Crowdsourced
+      Network, and this should occur via an authenticated and encrypted
+      channel.  This will help prevent malicious actors from interfering
+      with location reporting services.
 
-   *  Second, the Crowdsourced Network has a responsibility to ensure
-      that only authorized Owner Devices are able to download location
-      reports, and this should occur via an authenticated and encrypted
-      channel.  This will prevent malicious actors from unauthorized
-      access of location data.
+   *  Second, the Crowdsourced Network should ensure that only
+      authorized Owner Devices are able to download location reports,
+      and this should occur via an authenticated and encrypted channel.
+      This will prevent malicious actors from unauthorized access of
+      location data.
 
    *  Third, the Crowdsourced Network must follow basic security
-      principles, such as
-
-      -  Storing location reports in an encrypted manner
-
-      -  Limiting location report data storage to 7 days or less
+      principles, such as storing location reports in an encrypted
+      manner
 
       _(The benefits of this requirement are self explanatory.)_
 
@@ -266,8 +266,6 @@ Table of Contents
 
 4.  Protocol Overview
 
-4.1.  High Level Protocol
-
    Figure 1 provides an overall view of the protocol.
 
    In this protocol, the Accessory communicates to Finder Devices or
@@ -303,9 +301,130 @@ o          o                  │ │              │ │                 ~- . 
 
                      Figure 1: Protocol Overview
 
-   In this implementation, there are 4 stages that will be outlined,
-   taking into account elements from both [BlindMy] and [GMCKV21].
-   These stages are as follows:
+   As part of the setup phase (Section 5.4 the accessory and owning
+   device are paired, establishing a shared key SK which is known to
+   both the accessory and the owning device.  The rest of the protocol
+   proceeeds as follows.
+
+   *  The accessory periodically sends out an advertisement which
+      contains an ephemeral public key Y_i where i is the epoch the key
+      is valid for (e.g., a one hour window).  Y_i and its corresponding
+      private key X_i are generated in a deterministic fashion from SK
+      and the epoch i (conceptually as a X_i = PRF(SK, i)).
+
+   *  In order to report an accessory's location at time i a non-owning
+      device encrypts it under Y_i and transmits the pair ( E(Y_i,
+      location), Y_i ) to the central service.
+
+   *  In order to locate an accessory at time i, the owner uses SK to
+      compute (X_i, Y_i) and then sends Y_i to the central service.  The
+      central service responds with all the reports it has for Y_i, and
+      the owner decrypts them with X_i.
+
+   This design provides substantially improved privacy properties over a
+   naive design:
+
+   1.  Nobody but the owner can learn the reported location of an
+       accessory because it is encrypted under Y_i.  This includes the
+       central service, which just sees encrypted reports.
+
+   2.  It is not possible to correlate the public keys broadcast across
+       multiple epochs without knowing the shared key SK, which is only
+       know to the owner.  However, an observer who sees multiple
+       beacons within the same epoch can correlate them, as they will
+       have the same Y_i.  However, fast rotation also makes it more
+       difficult to detect unwanted tracking, which relies on multiple
+       observations of the same identifier over time.
+
+   However, there are a number of residual privacy threats, as described
+   below.
+
+4.1.  Reporting Device Leakage
+
+   If the central server is able to learn the identity of the device
+   reporting an accessory or the identity of the owner requesting the
+   location of an accessory, then it can infer information about that
+   accessory's behavior.  For instance:
+
+   *  If device A reports accessories X and Y owned by different users
+      and they both query for their devices, then the central server may
+      learn that those users were in the same place, or at least their
+      accessories were.
+
+   *  If devices A and B both report tag X, then the server learns that
+      A and B were in the same place.
+
+   *  If the central server is able to learn where a reporting device is
+      (e.g., by IP address) and then the user queries for that
+      accessory, then the server can infer information about where the
+      user was, or at least where they lost the accessory.
+
+   These issues can be mitigated by concealing the identity and/or IP
+   address of network elements communicating with the central server
+   using techniques such as Oblivious HTTP [RFC9458] or MASQUE
+   [RFC9298].
+
+4.2.  Non-compliant Accessories
+
+   The detection mechanisms described in
+   [I-D.detecting-unwanted-location-trackers] depend on correct behavior
+   from the tracker.  For instance, Section 3.5.1 of
+   [I-D.detecting-unwanted-location-trackers] requires that accessories
+   use a rotation period of 24 hours when in the "separated" state:
+
+   When in a separated state, the accessory SHALL rotate its address
+   every 24 hours.  This duration allows a platform's unwanted tracking
+   algorithms to detect that the same accessory is in proximity for some
+   period of time, when the owner is not in physical proximity.
+
+   However, if an attacker were to make their own accessory that was
+   generated the right beacon messages or modify an existing one, they
+   could cause it to rotate the MAC address and public key Y_i more
+   frequently, thus evading detection algorithms.  The following section
+   describes a mechanism which is intended to mitigate this attack.
+
+4.2.1.  Rate Limiting and Attestation
+
+   Because evading detection requires rapidly changing keys, evasion can
+   be made more difficult by limiting the rate at which keys can change.
+   This rate limiting works as follows:
+
+   1.  Instead of allowing the accessory to publish an arbitrary key Y_i
+       it instead must pre-generate a set of keys, one for each time
+       window.
+
+   2.  During the setup/pairing phase, the accessory and owning device
+       interact with the central service, which signs each temporal key
+       using a blind signature scheme.  The owning device stores the
+       signatures for each key Y_i.
+
+   3.  When it wishes to retrieve the location for a given accessory the
+       owning device provides the central service with the corresponding
+       signature, thus proving that it is retrieving location for a pre-
+       registered key; the central service will refuse to provide
+       results for unsigned keys.
+
+   Note that this mechanism _does not_ prevent the accessory from
+   broadcasting arbitrary keys, but it cannot retrieve location reports
+   corresponding to those keys.
+
+   This is not a complete defense: it limits an attacker who owns a
+   single accessory to a small number of keys per time window, but an
+   attacker who purchases N devices can then use N times that many keys
+   per window, potentially coordinating usage across spatially separated
+   devices to reduce the per-device cost.  [[OPEN ISSUE: Can we do
+   better than this?]]
+
+5.  Protocol Definition
+
+   This section provides a detailed description of the DULT Finding
+   Protocol.
+
+5.1.  System Stages
+
+   The there are 5 stages that will be outlined, taking into account
+   elements from both [BlindMy] and [GMCKV21].  These stages are as
+   follows:
 
    1) *Initial Pairing / Accessory Setup*
 
@@ -339,7 +458,7 @@ o          o                  │ │              │ │                 ~- . 
    Owner Device OD queries the Crowdsourced Network CN for the encrypted
    location report.
 
-4.2.  General Protocol Infrastructure Properties
+5.2.  General Protocol Infrastructure Properties
 
    Relying on [BlindMy], we define the following constraints:
 
@@ -363,7 +482,7 @@ o          o                  │ │              │ │                 ~- . 
    *  A parameter _N_ is defined by the protocol that represents the
       number of encryption keys produced during the pairing algorithm.
 
-4.3.  Partial Blind Signature Scheme
+5.3.  Partial Blind Signature Scheme
 
    In order to verify the parties involved in the protocol, we rely on a
    partial blind signature scheme as defined in [BlindMy] and [Okamoto]:
@@ -390,14 +509,14 @@ o          o                  │ │              │ │                 ~- . 
 
                                  Table 1
 
-4.4.  Initial Pairing / Accessory Setup
+5.4.  Initial Pairing / Accessory Setup
 
    During the pairing process, the Accessory ACC pairs with the Owner
    Device OD over Bluetooth.  In this process, the ACC and OD must
    generate cryptographically secure keys that will allow for the OD to
    decrypt the ACC location reports.
 
-4.4.1.  Authenticity Verification
+5.4.1.  Authenticity Verification
 
    Upon the initial pairing of the the ACC and OD, before the key
    generation process, the OD must facilitate communication with the CN
@@ -427,7 +546,7 @@ o          o                  │ │              │ │                 ~- . 
    (6) CN sends public parameters for generating _N_ partial blind
    signatures to OD.  These parameters are defined in the next section.
 
-4.4.2.  Key Generation and Signing with Partial Blind Signatures
+5.4.2.  Key Generation and Signing with Partial Blind Signatures
 
    In order for OD to have _N_ keys signed by partial blind signatures,
    the scheme described in [BlindMy] must be implemented.
@@ -492,19 +611,19 @@ o          o                  │ │              │ │                 ~- . 
    (KeyPair, UnblindedSignature) and transfers the _N_ public keys to
    the accessory ACC, ordered by timestamp.
 
-4.5.  Accessory Behavior
+5.5.  Accessory Behavior
 
    As part of the setup phase (described in [DultDoc3]) the Accessory
    ACC and Owner Device OD are paired, establishing a shared key S_K
    which is known to both the accessory and the owning device.  The rest
    of the protocol proceeds as follows:
 
-4.5.1.  Accessory in Nearby Owner Mode
+5.5.1.  Accessory in Nearby Owner Mode
 
    After pairing, when the Accessory ACC is in Bluetooth range of OD, it
    will follow the protocol as decribed in [DultDoc3].
 
-4.5.2.  Accessory in Separated (Lost) Mode
+5.5.2.  Accessory in Separated (Lost) Mode
 
    After pairing, when the Accessory ACC no longer in the Bluetooth
    range of OD, it will follow the protocol as decribed below:, which
@@ -519,7 +638,7 @@ o          o                  │ │              │ │                 ~- . 
    The full payload format of the Advertisement is defined in
    [DultDoc3].
 
-4.6.  Finder Device creates a Location Report
+5.6.  Finder Device creates a Location Report
 
    The Finder Device FD receives the advertisement via Bluetooth.  FD
    should have a mechanism by which to authenticate that this is a valid
@@ -554,7 +673,7 @@ o          o                  │ │              │ │                 ~- . 
       public key is unknown, since the server has already signed all of
       the keys in the past - but is it reasonable to save/store these?
 
-4.7.  Owner Device queries the Crowdsourced Network
+5.7.  Owner Device queries the Crowdsourced Network
 
    Following the sequence described in [BlindMy], valid ODs can retrieve
    the location of a paired ACC.  In order to query the location of ACC,
@@ -588,83 +707,21 @@ o          o                  │ │              │ │                 ~- . 
    and recover the timestamp, confidence, and location data associated
    with the report.
 
-   This design provides substantially improved privacy properties over a
-   naive design:
-
-   1.  Nobody but the owner can learn the reported location of an
-       accessory because it is encrypted under Y_i.  This includes the
-       central service, which just sees encrypted reports.
-
-   2.  It is not possible to correlate the public keys broadcast across
-       multiple epochs without knowing the shared key SK, which is only
-       know to the owner.  However, an observer who sees multiple
-       beacons within the same epoch can correlate them, as they will
-       have the same Y_i.  However, fast rotation also makes it more
-       difficult to detect unwanted tracking, which relies on multiple
-       observations of the same identifier over time.
-
-   However, there are a number of residual privacy threats, as described
-   below.
-
-4.8.  Reporting Device Leakage
-
-   If the central server is able to learn the identity of the device
-   reporting an accessory or the identity of the owner requesting the
-   location of an accessory, then it can infer information about that
-   accessory's behavior.  For instance:
-
-   *  If device A reports accessories X and Y owned by different users
-      and they both query for their devices, then the central server may
-      learn that those users were in the same place, or at least their
-      accessories were.
-
-   *  If devices A and B both report tag X, then the server learns that
-      A and B were in the same place.
-
-   *  If the central server is able to learn where a reporting device is
-      (e.g., by IP address) and then the user queries for that
-      accessory, then the server can infer information about where the
-      user was, or at least where they lost the accessory.
-
-   These issues can be mitigated by concealing the identity and/or IP
-   address of network elements communicating with the central server
-   using techniques such as Oblivious HTTP [RFC9458] or MASQUE
-   [RFC9298].
-
-4.9.  Non-compliant Accessories
-
-   The detection mechanisms described in
-   [I-D.detecting-unwanted-location-trackers] depend on correct behavior
-   from the tracker.  For instance, Section 3.5.1 of
-   [I-D.detecting-unwanted-location-trackers] requires that accessories
-   use a rotation period of 24 hours when in the "separated" state:
-
-   When in a separated state, the accessory SHALL rotate its address
-   every 24 hours.  This duration allows a platform's unwanted tracking
-   algorithms to detect that the same accessory is in proximity for some
-   period of time, when the owner is not in physical proximity.
-
-   However, if an attacker were to make their own accessory that was
-   generated the right beacon messages or modify an existing one, they
-   could cause it to rotate the MAC address more frequently, thus
-   evading detection algorithms.  The attestation mechanism described in
-   Section [TODO] is intended to mitigate this attack.
-
-5.  Security Considerations
+6.  Security Considerations
 
    TODO Security - as described in [DultDoc4]?
 
-6.  Privacy Considerations
+7.  Privacy Considerations
 
    TODO Privacy - as described in [DultDoc4]?
 
-7.  IANA Considerations
+8.  IANA Considerations
 
    This document has no IANA actions.
 
-8.  References
+9.  References
 
-8.1.  Normative References
+9.1.  Normative References
 
    [I-D.detecting-unwanted-location-trackers]
               Ledvina, B., Eddinger, Z., Detwiler, B., and S. P.
@@ -683,7 +740,7 @@ o          o                  │ │              │ │                 ~- . 
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
-8.2.  Informative References
+9.2.  Informative References
 
    [BlindMy]  Travis Mayberry, Erik-Oliver Blass, and Ellis Fenske,
               "Blind My — An Improved Cryptographic Protocol to Prevent
