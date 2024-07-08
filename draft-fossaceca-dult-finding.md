@@ -441,7 +441,7 @@ spatially separated devices to reduce the per-device cost.
 
 This section provides a detailed description of the DULT Finding Protocol.
 
-## Sysstem Stages
+## System Stages
 
 The there are 5 stages that will be outlined, taking into account elements from both {{BlindMy}} and {{GMCKV21}}.  These stages are as follows:
 
