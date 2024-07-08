@@ -398,9 +398,43 @@ the "separated" state:
 
 However, if an attacker were to make their own accessory that was
 generated the right beacon messages or modify an existing one, they
-could cause it to rotate the MAC address more frequently, thus
-evading detection algorithms. The attestation mechanism described
-in Section [TODO] is intended to mitigate this attack.
+could cause it to rotate the MAC address and public key `Y_i` more
+frequently, thus evading detection algorithms. The following section
+describes a mechanism which is intended to mitigate
+this attack.
+
+### Rate Limiting and Attestation
+
+Because evading detection requires rapidly changing keys, evasion
+can be made more difficult by limiting the rate at which keys
+can change. This rate limiting works as follows:
+
+1. Instead of allowing the accessory to publish an arbitrary
+   key `Y_i` it instead must pre-generate a set of keys,
+   one for each time window.
+   
+1. During the setup/pairing phase, the accessory and owning
+   device interact with the central service, which
+   signs each temporal key using a blind signature scheme.
+   The owning device stores the signatures for each key `Y_i`.
+   
+1. When it wishes to retrieve the location for a given accessory
+   the owning device provides the central service with the
+   corresponding signature, thus proving that it is retrieving
+   location for a pre-registered key; the central service
+   will refuse to provide results for unsigned keys.
+   
+Note that this mechanism _does not_ prevent the accessory
+from broadcasting arbitrary keys, but it cannot retrieve
+location reports corresponding to those keys.
+
+This is not a complete defense: it limits an attacker who owns
+a single accessory to a small number of keys per time window,
+but an attacker who purchases N devices can then use N times
+that many keys per window, potentially coordinating usage across
+spatially separated devices to reduce the per-device cost.
+[[OPEN ISSUE: Can we do better than this?]]
+
 
 
 # Protocol Definition
