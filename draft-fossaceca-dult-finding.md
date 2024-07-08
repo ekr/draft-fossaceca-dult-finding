@@ -412,18 +412,18 @@ can change. This rate limiting works as follows:
 1. Instead of allowing the accessory to publish an arbitrary
    key `Y_i` it instead must pre-generate a set of keys,
    one for each time window.
-   
+
 1. During the setup/pairing phase, the accessory and owning
    device interact with the central service, which
    signs each temporal key using a blind signature scheme.
    The owning device stores the signatures for each key `Y_i`.
-   
+
 1. When it wishes to retrieve the location for a given accessory
    the owning device provides the central service with the
    corresponding signature, thus proving that it is retrieving
    location for a pre-registered key; the central service
    will refuse to provide results for unsigned keys.
-   
+
 Note that this mechanism _does not_ prevent the accessory
 from broadcasting arbitrary keys, but it cannot retrieve
 location reports corresponding to those keys.
