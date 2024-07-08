@@ -499,7 +499,7 @@ In order to verify the parties involved in the protocol, we rely on a partial bl
 | * There exists two interactive PPT algorithms called *Signer* and *User* that compute a signature `σ` of a message `m` and plaintext auxiliary information `info`. The *Signer* begins with (`s`<sub>k</sub>,`p`<sub>k</sub>,`info`), and the *User* starts with (`p`<sub>k</sub>,`info`, `m`). After interacting, the *User* outputs (`m`, `σ` ) if the protocol succeeds and    `⊥` if it fails.            |
 | * There exists a PPT algorithm called *Verify* that receives  (`p`<sub>k</sub>,`info`, `m`,`σ` ) and outputs `accept` when the signature is valid, and `reject` if it is not.           |
 
-Text adapted from {{Section 2.5 of BlindMy}}.
+Text adapted from Section 2.5 of {{BlindMy}}.
 
 ## Initial Pairing / Accessory Setup {#setup}
 
