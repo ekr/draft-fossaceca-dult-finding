@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-07T00:24:03.463228+00:00",
+  "timestamp": "2024-07-09T00:21:34.898243+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -124,6 +124,124 @@
       "mergedBy": "cfossace",
       "mergeCommit": {
         "oid": "45f9552248bb78dff56debf1d9a68760f51720bd"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOLlgmts50rr2L",
+      "title": "Added Protocol information from BlindMy and CrowdSourced documents",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/4",
+      "state": "CLOSED",
+      "author": "cfossace",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-08T11:39:55Z",
+      "updatedAt": "2024-07-08T11:54:57Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "d1d881325357395325d1e8568dba10cad87b0888",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "cmf_modifications",
+      "headRefOid": "ba9046021221514cffb668fe71b736a01a660aa7",
+      "closedAt": "2024-07-08T11:54:57Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "cfossace",
+          "authorAssociation": "COLLABORATOR",
+          "body": "closing this PR in favor of other one",
+          "createdAt": "2024-07-08T11:54:57Z",
+          "updatedAt": "2024-07-08T11:54:57Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 5,
+      "id": "PR_kwDOLlgmts50ryfP",
+      "title": "adding tracking info from existing products",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/5",
+      "state": "MERGED",
+      "author": "cfossace",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-08T11:53:07Z",
+      "updatedAt": "2024-07-08T11:54:19Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "d1d881325357395325d1e8568dba10cad87b0888",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "additional_mod",
+      "headRefOid": "0a6d7341df52908910bc0d14ff0e987a09b19866",
+      "closedAt": "2024-07-08T11:54:19Z",
+      "mergedAt": "2024-07-08T11:54:19Z",
+      "mergedBy": "cfossace",
+      "mergeCommit": {
+        "oid": "6ca7584d1b3f2ec91f892b11a6bc84d6d8558446"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOLlgmts50r7Qg",
+      "title": "Add disclaimer",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/6",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-08T12:12:36Z",
+      "updatedAt": "2024-07-08T13:27:50Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "6ca7584d1b3f2ec91f892b11a6bc84d6d8558446",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "add_disclaimer",
+      "headRefOid": "e29a119265d6dee234af6327e36a67d91c0ad618",
+      "closedAt": "2024-07-08T13:27:50Z",
+      "mergedAt": "2024-07-08T13:27:50Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "9cf67eae453988756dee245e2a014b9239f2f878"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOLlgmts50uZSt",
+      "title": "Separate out the overview and the protocol definition.",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/7",
+      "state": "MERGED",
+      "author": "ekr",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-08T17:33:44Z",
+      "updatedAt": "2024-07-08T17:49:50Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "9cf67eae453988756dee245e2a014b9239f2f878",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "ekr_separate_overview",
+      "headRefOid": "23882dc84e0e033d20ecf0108ec97b0bbaebcf61",
+      "closedAt": "2024-07-08T17:49:50Z",
+      "mergedAt": "2024-07-08T17:49:50Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "23882dc84e0e033d20ecf0108ec97b0bbaebcf61"
       },
       "comments": [],
       "reviews": []
