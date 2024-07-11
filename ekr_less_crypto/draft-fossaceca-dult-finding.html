@@ -1197,29 +1197,29 @@ they have seen and by which owners look up their location.<a href="#section-abst
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4.2.2">
                     <p id="section-toc.1-1.5.2.4.2.2.1"><a href="#section-5.4.2" class="auto internal xref">5.4.2</a>.  <a href="#name-key-generation-and-signing-" class="internal xref">Key Generation and Signing with Partial Blind Signatures</a></p>
 </li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4.2.3">
+                    <p id="section-toc.1-1.5.2.4.2.3.1"><a href="#section-5.4.3" class="auto internal xref">5.4.3</a>.  <a href="#name-accessory-in-nearby-owner-m" class="internal xref">Accessory in Nearby Owner Mode</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4.2.4">
+                    <p id="section-toc.1-1.5.2.4.2.4.1"><a href="#section-5.4.4" class="auto internal xref">5.4.4</a>.  <a href="#name-accessory-in-separated-lost" class="internal xref">Accessory in Separated (Lost) Mode</a></p>
+</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
-                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-accessory-behavior" class="internal xref">Accessory Behavior</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5.2.1">
-                    <p id="section-toc.1-1.5.2.5.2.1.1"><a href="#section-5.5.1" class="auto internal xref">5.5.1</a>.  <a href="#name-accessory-in-nearby-owner-m" class="internal xref">Accessory in Nearby Owner Mode</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5.2.2">
-                    <p id="section-toc.1-1.5.2.5.2.2.1"><a href="#section-5.5.2" class="auto internal xref">5.5.2</a>.  <a href="#name-accessory-in-separated-lost" class="internal xref">Accessory in Separated (Lost) Mode</a></p>
-</li>
-                </ul>
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-finder-device-creates-a-loc" class="internal xref">Finder Device creates a Location Report</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
-                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-finder-device-creates-a-loc" class="internal xref">Finder Device creates a Location Report</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
-                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-owner-device-queries-the-cr" class="internal xref">Owner Device queries the Crowdsourced Network</a></p>
+                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-owner-device-queries-the-cr" class="internal xref">Owner Device queries the Crowdsourced Network</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-effectiveness-of-rate-limit" class="internal xref">Effectiveness of Rate Limiting via Blind Signatures</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
@@ -1317,7 +1317,8 @@ anything about the location of a given accessory.<a href="#section-1-7.1.1" clas
 which is intended to minimize these privacy risks. It is intended
 to work in concert with the requirements defined in
 <span>[<a href="#I-D.detecting-unwanted-location-trackers" class="cite xref">I-D.detecting-unwanted-location-trackers</a>]</span>, which facilitate
-detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> and closely follows
+the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="motivations">
@@ -1751,10 +1752,14 @@ in network byte order.<a href="#section-5.4.2-7.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-5.4.2-8">CN returns a signature computed using:<a href="#section-5.4.2-8" class="pilcrow">¶</a></p>
+<p id="section-5.4.2-8">Prior to signing the key, the <code>CN</code> must ensure the acceptability of the timestamp.
+While the details are implementation dependent, this generally involves
+enforcing rate limits on how many keys can be signed with timestamps
+within a given window. Once the <code>CN</code> is satisfied with the submission
+it constructs a blind signature as shown below and returns it to the <code>OD</code>.<a href="#section-5.4.2-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5.4.2-9">
 <pre>
-BlindSign(sk, blindedKey, info)
+    BlindSign(sk, blindedKey, info)
 </pre><a href="#section-5.4.2-9" class="pilcrow">¶</a>
 </div>
 <p id="section-5.4.2-10">With the following inputs<a href="#section-5.4.2-10" class="pilcrow">¶</a></p>
@@ -1770,83 +1775,86 @@ BlindSign(sk, blindedKey, info)
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-5.4.2-12">(4) <code>CN</code> verifies the timestamp infomation and aborts if not in a valid range.<a href="#section-5.4.2-12" class="pilcrow">¶</a></p>
-<p id="section-5.4.2-13">(5) <code>CN</code> signs each each public key with a blind signature and sends the <em>N</em> blind signatures to <code>OD</code>.<a href="#section-5.4.2-13" class="pilcrow">¶</a></p>
-<p id="section-5.4.2-14">(6) <code>OD</code> unblinds the signatures and stores <em>N</em> pairs of the form <code>(KeyPair, UnblindedSignature)</code> and transfers the <em>N</em> public keys to the accessory <code>ACC</code>, ordered by timestamp.<a href="#section-5.4.2-14" class="pilcrow">¶</a></p>
+<p id="section-5.4.2-12">Upon receiving the signed blinded key, the <code>OD</code> unblinds the signature
+and stores it. If the <code>OD</code> generated <code>Y_i</code>, it must also transfer it
+to the <code>ACC</code>. Note that <code>ACC</code> does not need a copy of the signature.<a href="#section-5.4.2-12" class="pilcrow">¶</a></p>
 </section>
 </div>
-</section>
-</div>
-<div id="accessory-behavior">
-<section id="section-5.5">
-        <h3 id="name-accessory-behavior">
-<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-accessory-behavior" class="section-name selfRef">Accessory Behavior</a>
-        </h3>
-<p id="section-5.5-1">As part of the setup phase (described in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>) the Accessory <code>ACC</code> and
-Owner Device <code>OD</code> are paired, establishing a shared key <code>S</code><sub>K</sub>
-which is known to both the accessory and the owning device.
-The rest of the protocol proceeds as follows:<a href="#section-5.5-1" class="pilcrow">¶</a></p>
 <div id="accessory-in-nearby-owner-mode">
-<section id="section-5.5.1">
+<section id="section-5.4.3">
           <h4 id="name-accessory-in-nearby-owner-m">
-<a href="#section-5.5.1" class="section-number selfRef">5.5.1. </a><a href="#name-accessory-in-nearby-owner-m" class="section-name selfRef">Accessory in Nearby Owner Mode</a>
+<a href="#section-5.4.3" class="section-number selfRef">5.4.3. </a><a href="#name-accessory-in-nearby-owner-m" class="section-name selfRef">Accessory in Nearby Owner Mode</a>
           </h4>
-<p id="section-5.5.1-1">After pairing, when the Accessory <code>ACC</code> is in Bluetooth range of <code>OD</code>, it will follow the protocol as decribed in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.4.3-1">After pairing, when the Accessory <code>ACC</code> is in Bluetooth range of <code>OD</code>, it will follow the protocol as decribed in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.4.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accessory-in-separated-lost-mode">
-<section id="section-5.5.2">
+<section id="section-5.4.4">
           <h4 id="name-accessory-in-separated-lost">
-<a href="#section-5.5.2" class="section-number selfRef">5.5.2. </a><a href="#name-accessory-in-separated-lost" class="section-name selfRef">Accessory in Separated (Lost) Mode</a>
+<a href="#section-5.4.4" class="section-number selfRef">5.4.4. </a><a href="#name-accessory-in-separated-lost" class="section-name selfRef">Accessory in Separated (Lost) Mode</a>
           </h4>
-<p id="section-5.5.2-1">After pairing, when the Accessory <code>ACC</code> no longer in the Bluetooth range of <code>OD</code>, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>:<a href="#section-5.5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.5.2-2"><code>ACC</code> periodically sends out an Advertisement which contains
-an ephemeral public key <code>Y</code><sub>i</sub> where <code>i</code> is the epoch the key is valid
-for.  As defined by our protocol, this epoch is a 24 hour period. <code>Y</code><sub>i</sub> and its corresponding private key
-<code>X</code><sub>i</sub> are generated in a deterministic fashion from <code>S</code><sub>K</sub> and the epoch
-<code>i</code> (conceptually as <code>X</code><sub>i</sub> = <code>PRF</code>(<code>S</code><sub>K</sub>, <code>i</code>)).<a href="#section-5.5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.5.2-3">The full payload format of the Advertisement is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.4.4-1">After pairing, when the Accessory <code>ACC</code> no longer in the Bluetooth range of <code>OD</code>, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>:<a href="#section-5.4.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4.4-2"><code>ACC</code> periodically sends out an Advertisement which contains the then
+current ephemeral public key <code>Y_i</code>. The full payload format of the
+Advertisement is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.4.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="finder-device-creates-a-location-report">
-<section id="section-5.6">
+<section id="section-5.5">
         <h3 id="name-finder-device-creates-a-loc">
-<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-finder-device-creates-a-loc" class="section-name selfRef">Finder Device creates a Location Report</a>
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-finder-device-creates-a-loc" class="section-name selfRef">Finder Device creates a Location Report</a>
         </h3>
-<p id="section-5.6-1">The Finder Device <code>FD</code> receives the advertisement via Bluetooth. <code>FD</code> should have a mechanism by which to authenticate that this is a valid public key with <code>CN</code>. *<a href="#section-5.6-1" class="pilcrow">¶</a></p>
-<p id="section-5.6-2">In order to report an accessory's location at time <code>i</code>, <code>FD</code> extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span>.<a href="#section-5.6-2" class="pilcrow">¶</a></p>
-<p id="section-5.6-3"><code>FD</code> performs ECDH with the public key  <code>Y</code><sub>i</sub> and derives a shared symmetric key with ECIES.<a href="#section-5.6-3" class="pilcrow">¶</a></p>
-<p id="section-5.6-4">It then encrypts the location data using the symmetric key, and creates a payload as described in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span> and <span>[<a href="#WhoTracks" class="cite xref">WhoTracks</a>]</span>. It transmits a payload to <code>CN</code> with the encrypted packet
-<code>( E(Y</code><sub>i</sub>,<code>location), Y</code><sub>i</sub><code>)</code>.<a href="#section-5.6-4" class="pilcrow">¶</a></p>
-<p id="section-5.6-5"><code>FD</code> uploads the encrypted payload, the public ephemeral key, a timestamp, and the hash of the public key to <code>CN</code>, who records it in a key-value store with the key as the hash of the <code>ACC</code> public key.<a href="#section-5.6-5" class="pilcrow">¶</a></p>
-<p id="section-5.6-6">* Some ideas include<a href="#section-5.6-6" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-5.6-7.1">
-            <p id="section-5.6-7.1.1"><code>FD</code> can request a signature itself of the key - but would it be the same?<a href="#section-5.6-7.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.6-7.2">
-            <p id="section-5.6-7.2.1"><code>ACC</code> can send the public key and the signature to <code>FD</code> so <code>FD</code> can verify the signature<a href="#section-5.6-7.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-5.6-7.3">
-            <p id="section-5.6-7.3.1"><code>CN</code> has the option of discarding the packet if the hash of the public key is unknown, since the server has already signed all of the keys in the past - but is it reasonable to save/store these?<a href="#section-5.6-7.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
+<p id="section-5.5-1">The Finder Device <code>FD</code> receives the advertisement via Bluetooth. <code>FD</code> should have a mechanism by which to authenticate that this is a valid public key with <code>CN</code>. *<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">In order to report an accessory's location at time <code>i</code>, <code>FD</code> extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span>.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+<p id="section-5.5-3"><code>FD</code> performs ECDH with the public key  <code>Y</code><sub>i</sub> and uses it to encrypt the
+location data using HPKE Seal <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span>. It sends the result to the CN along with
+the hash of the current public key and the current time.
+[[OPEN ISSUE: Should we work in terms of hashes or the public
+keys. What we send has to be what's looked up.]]. <code>CN</code> stores the resulting
+values indexed under the hash of the public key.<a href="#section-5.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="owner-device-queries-the-crowdsourced-network">
-<section id="section-5.7">
+<section id="section-5.6">
         <h3 id="name-owner-device-queries-the-cr">
-<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-owner-device-queries-the-cr" class="section-name selfRef">Owner Device queries the Crowdsourced Network</a>
+<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-owner-device-queries-the-cr" class="section-name selfRef">Owner Device queries the Crowdsourced Network</a>
         </h3>
-<p id="section-5.7-1">Following the sequence described in <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>, valid <code>OD</code>s can retrieve the location of a paired <code>ACC</code>.  In order to query the location of <code>ACC</code>, the <code>OD</code> can sends a request to the <code>CN</code>. The <code>CN</code> must verify that each location requested has been blind-signed and is within a valid date range This prevents adversaries from storing many old blind-signed keys and rotating them quickly in order to avoid detection.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
-<p id="section-5.7-2">This is achieved in the following manner:<a href="#section-5.7-2" class="pilcrow">¶</a></p>
-<p id="section-5.7-3">(1) In order to locate an accessory at time <code>i</code>, the <code>OD</code> uses <code>SK</code> to
-compute the hash of the desired public key <code>Y</code><sub>i</sub>. The owner <code>OD</code> sends the unblinded, signed public key hashes to <code>CN</code> corresponding to the date range they are interested in retrieving, along with the corresponding info fields for each one.<a href="#section-5.7-3" class="pilcrow">¶</a></p>
-<p id="section-5.7-4">(2) <code>CN</code> confirms the auxiliary information on each signature is reasonable (e.g. falls within the last 7 days) and that the signature of each hash verifies correctly.<a href="#section-5.7-4" class="pilcrow">¶</a></p>
-<p id="section-5.7-5">(3) <code>CN</code> retrieves any report matching the hashes supplied <code>Y</code><sub>i</sub> and returns them to the <code>OD</code>, including the public key hash, the ephemeral public key, and encrypted payload, minus any reports where the timestamp does not match the correct time period from the info field (this would indicate that they key was being used outside of its intended validity period).<a href="#section-5.7-5" class="pilcrow">¶</a></p>
-<p id="section-5.7-6">(4) For each report, <code>OD</code> finds the public key for the report by its hash, and uses the corresponding private key alongside the ephemeral public key included in the report to decrypt the encrypted payload and recover the timestamp, confidence, and location data associated with the report.<a href="#section-5.7-6" class="pilcrow">¶</a></p>
+<p id="section-5.6-1"><code>OD</code>s can retrieve the location of a paired <code>ACC</code> by querying the <code>CN</code>.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+<p id="section-5.6-2">In order to query for a given time period <code>i</code> it presents:<a href="#section-5.6-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.6-3.1">
+            <p id="section-5.6-3.1.1">The public key <code>Y_i</code> [or hash of the public key]<a href="#section-5.6-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.6-3.2">
+            <p id="section-5.6-3.2.1">The <code>CN</code>'s signature over <code>Y_i</code> as well as the associated
+<code>info</code> value.<a href="#section-5.6-3.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.6-4">The CN then proceeds as follows:<a href="#section-5.6-4" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.6-5">
+<li id="section-5.6-5.1">
+            <p id="section-5.6-5.1.1">Verify the signature over the key [hash]<a href="#section-5.6-5.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.6-5.2">
+            <p id="section-5.6-5.2.1">Verify that the timestamp in the <code>info</code> value is within an
+acceptable period of time (e.g., one week) from the current time
+[[OPEN ISSUE: Why do we need this step?]]<a href="#section-5.6-5.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.6-5.3">
+            <p id="section-5.6-5.3.1">Retrieve all reports matching the provided <code>Y_i</code><a href="#section-5.6-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.6-5.4">
+            <p id="section-5.6-5.4.1">Remove all reports which have timestamps are within the acceptable
+time use window for the key, as indicated by the key's timestamp.<a href="#section-5.6-5.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-5.6-5.5">
+            <p id="section-5.6-5.5.1">Return the remaining reports to <code>OD</code>.<a href="#section-5.6-5.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-5.6-6">Finally, <code>OD</code> uses HPKE Open to decrypt the resulting reports,
+thus recovering the location data for report.<a href="#section-5.6-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1856,7 +1864,42 @@ compute the hash of the desired public key <code>Y</code><sub>i</sub>. The owner
       <h2 id="name-security-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-6-1">TODO Security - as described in <span>[<a href="#DultDoc4" class="cite xref">DultDoc4</a>]</span>?<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">TODO Security - as described in <span>[<a href="#DultDoc4" class="cite xref">DultDoc4</a>]</span>?.
+This section still mostly needs to be written.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<div id="effectiveness-of-rate-limiting-via-blind-signatures">
+<section id="section-6.1">
+        <h3 id="name-effectiveness-of-rate-limit">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-effectiveness-of-rate-limit" class="section-name selfRef">Effectiveness of Rate Limiting via Blind Signatures</a>
+        </h3>
+<p id="section-6.1-1">The blind signature mechanism described here (adapted from
+<span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>) helps to limit the damage of noncompliant devices.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-2">Because the <code>CN</code> will only generate signatures when the request is
+associated with a valid device, an attacker cannot obtain a key
+directly for a noncompliant device. However, this does not necessarily
+mean that the attacker cannot provision noncompliant
+devices. Specifically, if the <code>OD</code> sees the public keys (it need not
+know the private keys, as described below) when they are sent to the
+<code>CN</code> for signature, then it can provision them to a noncompliant
+device.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">Even an attacker who can provision invalid devices can only obtain one
+key per time window per valid device. Because key use windows overlap,
+it is possible to rotate keys more frequently than the window, but in
+order to rotate keys significantly more frequently than this, the
+attacker must purchase multiple devices. However, they may be able
+to provision the keys from multiple valid devices onto the same device,
+thus achieving a rotation rate increase at linear cost.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">Note that enforcement of this rate limit happens only on the <code>CN</code>: the
+FD does not check. An attacker can generate advertisements with
+unsigned keys -- and thus at any rotation rate it chooses -- and the
+<code>FD</code> will duly send valid reports encrypted under those keys. The <code>CN</code>
+will store them but because the attacker will not be able to produce
+valid signatures, they will not be able to retrieve those reports.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">As noted above, the <code>ACC</code> does not need to prove that it knows the
+corresponding private keys for a given public key. The <code>ACC</code>
+simply broadcasts the public keys; it is the <code>OD</code> which needs to
+know the private keys in order to decrypt the reports.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="privacy-considerations">
@@ -1894,8 +1937,12 @@ compute the hash of the desired public key <code>Y</code><sub>i</sub>. The owner
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9180">[RFC9180]</dt>
+      <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Bhargavan, K.</span>, <span class="refAuthor">Lipp, B.</span>, and <span class="refAuthor">C. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="seriesInfo">RFC 9180</span>, <span class="seriesInfo">DOI 10.17487/RFC9180</span>, <time datetime="2022-02" class="refDate">February 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180">https://www.rfc-editor.org/rfc/rfc9180</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
