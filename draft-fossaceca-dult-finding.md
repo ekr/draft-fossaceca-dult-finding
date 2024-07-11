@@ -628,11 +628,6 @@ keys. What we send has to be what's looked up.]]. `CN` stores the resulting
 values indexed under the hash of the public key.
 
 
-\* Some ideas include
-
-- `FD` can request a signature itself of the key - but would it be the same?
-- `ACC` can send the public key and the signature to `FD` so `FD` can verify the signature
-- `CN` has the option of discarding the packet if the hash of the public key is unknown, since the server has already signed all of the keys in the past - but is it reasonable to save/store these?
 
 
 ## Owner Device queries the Crowdsourced Network
@@ -660,15 +655,61 @@ Finally, `OD` uses HPKE Open to decrypt the resulting reports,
 thus recovering the location data for report.
 
 
+<!--
+\* Some ideas include
+
+- `FD` can request a signature itself of the key - but would it be the same?
+- `ACC` can send the public key and the signature to `FD` so `FD` can verify the signature
+- `CN` has the option of discarding the packet if the hash of the public key is unknown, since the server has already signed all of the keys in the past - but is it reasonable to save/store these?
+-->
+
 
 # Security Considerations
 
-TODO Security - as described in {{DultDoc4}}?
+TODO Security - as described in {{DultDoc4}}?.
+This section still mostly needs to be written.
+
+### Effectiveness of Rate Limiting via Blind Signatures
+
+The blind signature mechanism described here (adapted from
+{{BlindMy}}) helps to limit the damage of noncompliant devices.
+
+Because the `CN` will only generate signatures when the request is
+associated with a valid device, an attacker cannot obtain a key
+directly for a noncompliant device. However, this does not necessarily
+mean that the attacker cannot provision noncompliant
+devices. Specifically, if the `OD` sees the public keys (it need not
+know the private keys, as described below) when they are sent to the
+`CN` for signature, then it can provision them to a noncompliant
+device.
+
+Even an attacker who can provision invalid devices can only obtain one
+key per time window per valid device. Because key use windows overlap,
+it is possible to rotate keys more frequently than the window, but in
+order to rotate keys significantly more frequently than this, the
+attacker must purchase multiple devices. However, they may be able
+to provision the keys from multiple valid devices onto the same device,
+thus achieving a rotation rate increase at linear cost.
+
+Note that enforcement of this rate limit happens only on the `CN`: the
+FD does not check. An attacker can generate advertisements with
+unsigned keys -- and thus at any rotation rate it chooses -- and the
+`FD` will duly send valid reports encrypted under those keys. The `CN`
+will store them but because the attacker will not be able to produce
+valid signatures, they will not be able to retrieve those reports.
+
+As noted above, the `ACC` does not need to prove that it knows the
+corresponding private keys for a given public key. The `ACC`
+simply broadcasts the public keys; it is the `OD` which needs to
+know the private keys in order to decrypt the reports.
 
 
 # Privacy Considerations
 
 TODO Privacy - as described in {{DultDoc4}}?
+
+
+
 
 
 # IANA Considerations
