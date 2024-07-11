@@ -215,7 +215,8 @@ This document defines a cryptographic reporting and finding protocol
 which is intended to minimize these privacy risks. It is intended
 to work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
-detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in {{BlindMy}} and {{GMCKV21}}.
+detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in {{BlindMy}} and {{GMCKV21}} and closely follows
+the design of {{BlindMy}}.
 
 
 # Motivations
@@ -560,9 +561,9 @@ timestamp
 : The time value for the first time when the key will be used in
   seconds since the UNIX epoch
 
-~~~
+~~~~
 blindedKey = Blind(pk, Y_i, info)
-~~~
+~~~~
 
 With the following inputs:
 
@@ -576,11 +577,16 @@ info
 : The timestamp value serialized as an unsigned 64-bit integer
   in network byte order.
 
-CN returns a signature computed using:
 
-~~~
-BlindSign(sk, blindedKey, info)
-~~~
+Prior to signing the key, the `CN` must ensure the acceptability of the timestamp.
+While the details are implementation dependent, this generally involves
+enforcing rate limits on how many keys can be signed with timestamps
+within a given window. Once the `CN` is satisfied with the submission
+it constructs a blind signature as shown below and returns it to the `OD`.
+
+~~~~
+    BlindSign(sk, blindedKey, info)
+~~~~
 
 With the following inputs
 
@@ -590,20 +596,10 @@ sk
 blindedKey
 : The raw bytes of the blinded key provided by `CN`
 
-(4) `CN` verifies the timestamp infomation and aborts if not in a valid range.
+Upon receiving the signed blinded key, the `OD` unblinds the signature
+and stores it. If the `OD` generated `Y_i`, it must also transfer it
+to the `ACC`. Note that `ACC` does not need a copy of the signature.
 
-
-(5) `CN` signs each each public key with a blind signature and sends the *N* blind signatures to `OD`.
-
-(6) `OD` unblinds the signatures and stores *N* pairs of the form `(KeyPair, UnblindedSignature)` and transfers the *N* public keys to the accessory `ACC`, ordered by timestamp.
-
-
-## Accessory Behavior
-
-As part of the setup phase (described in {{DultDoc3}}) the Accessory `ACC` and
-Owner Device `OD` are paired, establishing a shared key `S`<sub>K</sub>
-which is known to both the accessory and the owning device.
-The rest of the protocol proceeds as follows:
 
 ### Accessory in Nearby Owner Mode
 
@@ -613,13 +609,9 @@ After pairing, when the Accessory `ACC` is in Bluetooth range of `OD`, it will f
 
 After pairing, when the Accessory `ACC` no longer in the Bluetooth range of `OD`, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in {{DultDoc3}}:
 
-`ACC` periodically sends out an Advertisement which contains
-an ephemeral public key `Y`<sub>i</sub> where `i` is the epoch the key is valid
-for.  As defined by our protocol, this epoch is a 24 hour period. `Y`<sub>i</sub> and its corresponding private key
-`X`<sub>i</sub> are generated in a deterministic fashion from `S`<sub>K</sub> and the epoch
-`i` (conceptually as `X`<sub>i</sub> = `PRF`(`S`<sub>K</sub>, `i`)).
-
-The full payload format of the Advertisement is defined in {{DultDoc3}}.
+`ACC` periodically sends out an Advertisement which contains the then
+current ephemeral public key `Y_i`. The full payload format of the
+Advertisement is defined in {{DultDoc3}}.
 
 
 ## Finder Device creates a Location Report
@@ -628,12 +620,13 @@ The Finder Device `FD` receives the advertisement via Bluetooth. `FD` should hav
 
 In order to report an accessory's location at time `i`, `FD` extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in {{Heinrich}}.
 
-`FD` performs ECDH with the public key  `Y`<sub>i</sub> and derives a shared symmetric key with ECIES.
+`FD` performs ECDH with the public key  `Y`<sub>i</sub> and uses it to encrypt the
+location data using HPKE Seal {{!RFC9180}}. It sends the result to the CN along with
+the hash of the current public key and the current time.
+[[OPEN ISSUE: Should we work in terms of hashes or the public
+keys. What we send has to be what's looked up.]]. `CN` stores the resulting
+values indexed under the hash of the public key.
 
-It then encrypts the location data using the symmetric key, and creates a payload as described in {{Heinrich}} and {{WhoTracks}}. It transmits a payload to `CN` with the encrypted packet
-`( E(Y`<sub>i</sub>,`location), Y`<sub>i</sub>`)`.
-
-`FD` uploads the encrypted payload, the public ephemeral key, a timestamp, and the hash of the public key to `CN`, who records it in a key-value store with the key as the hash of the `ACC` public key.
 
 \* Some ideas include
 
@@ -644,21 +637,27 @@ It then encrypts the location data using the symmetric key, and creates a payloa
 
 ## Owner Device queries the Crowdsourced Network
 
-Following the sequence described in {{BlindMy}}, valid `OD`s can retrieve the location of a paired `ACC`.  In order to query the location of `ACC`, the `OD` can sends a request to the `CN`. The `CN` must verify that each location requested has been blind-signed and is within a valid date range This prevents adversaries from storing many old blind-signed keys and rotating them quickly in order to avoid detection.
+`OD`s can retrieve the location of a paired `ACC` by querying the `CN`.
 
-This is achieved in the following manner:
+In order to query for a given time period `i` it presents:
 
-(1) In order to locate an accessory at time `i`, the `OD` uses `SK` to
-compute the hash of the desired public key `Y`<sub>i</sub>. The owner `OD` sends the unblinded, signed public key hashes to `CN` corresponding to the date range they are interested in retrieving, along with the corresponding info fields for each one.
+* The public key `Y_i` [or hash of the public key]
+* The `CN`'s signature over `Y_i` as well as the associated
+  `info` value.
 
+The CN then proceeds as follows:
 
-(2) `CN` confirms the auxiliary information on each signature is reasonable (e.g. falls within the last 7 days) and that the signature of each hash verifies correctly.
+1. Verify the signature over the key [hash]
+1. Verify that the timestamp in the `info` value is within an
+   acceptable period of time (e.g., one week) from the current time
+   [[OPEN ISSUE: Why do we need this step?]]
+1. Retrieve all reports matching the provided `Y_i`
+1. Remove all reports which have timestamps are within the acceptable
+   time use window for the key, as indicated by the key's timestamp.
+1. Return the remaining reports to `OD`.
 
-
-(3) `CN` retrieves any report matching the hashes supplied `Y`<sub>i</sub> and returns them to the `OD`, including the public key hash, the ephemeral public key, and encrypted payload, minus any reports where the timestamp does not match the correct time period from the info field (this would indicate that they key was being used outside of its intended validity period).
-
-(4) For each report, `OD` finds the public key for the report by its hash, and uses the corresponding private key alongside the ephemeral public key included in the report to decrypt the encrypted payload and recover the timestamp, confidence, and location data associated with the report.
-
+Finally, `OD` uses HPKE Open to decrypt the resulting reports,
+thus recovering the location data for report.
 
 
 
