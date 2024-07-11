@@ -441,7 +441,7 @@ spatially separated devices to reduce the per-device cost.
 
 This section provides a detailed description of the DULT Finding Protocol.
 
-## Sysstem Stages
+## System Stages
 
 The there are 5 stages that will be outlined, taking into account elements from both {{BlindMy}} and {{GMCKV21}}.  These stages are as follows:
 
@@ -470,7 +470,7 @@ Owner Device `OD` queries the Crowdsourced Network `CN` for the encrypted locati
 
 ## General Protocol Infrastructure Properties
 
-Relying on {{BlindMy}}, we define the following constraints:
+We define the following constraints, adapted from {{BlindMy}} Section 4.2.
 
 - There exists an agreed upon elliptic curve group with a generator,
 a secure Message Authentication Algorithm, and a hashing
@@ -483,7 +483,9 @@ function *H*.
 
 - `CN` maintains a database of registered serial values D<sub>SERIAL</sub>
 
--  Each Accessory `ACC`<sub>i</sub> contains a unique serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>)
+-  Each Accessory `ACC`<sub>i</sub> is provisioned with a unique
+   serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>),
+   where the tag is a MAC computed over D<sub>SERIAL</sub>.
 
 - All parties have a synchronized clock and the ability to represent the current day (or another arbitrary timestamp) as an integer
 
@@ -491,91 +493,102 @@ function *H*.
 
 ## Partial Blind Signature Scheme
 
-In order to verify the parties involved in the protocol, we rely on a partial blind signature scheme as defined in {{BlindMy}} and {{Okamoto}}:
+[[OPEN ISSUE: Which blind signature scheme to use.]]
+In order to verify the parties involved in the protocol, we rely on a
+partially blind signature scheme. {{?RFC9474}} describes a blind signature
+scheme as follows:
 
-| Partial Blind Signature Scheme   |
-|:------------------------------:|
-| * There exists a probabilistic polynomial time (PPT) algorithm called *KeyGen* that takes a security parameter as input and outputs a key pair containing a secret key and public key (`s`<sub>k</sub>,`p`<sub>k</sub>).         |
-| * There exists two interactive PPT algorithms called *Signer* and *User* that compute a signature `σ` of a message `m` and plaintext auxiliary information `info`. The *Signer* begins with (`s`<sub>k</sub>,`p`<sub>k</sub>,`info`), and the *User* starts with (`p`<sub>k</sub>,`info`, `m`). After interacting, the *User* outputs (`m`, `σ` ) if the protocol succeeds and    `⊥` if it fails.            |
-| * There exists a PPT algorithm called *Verify* that receives  (`p`<sub>k</sub>,`info`, `m`,`σ` ) and outputs `accept` when the signature is valid, and `reject` if it is not.           |
+   The RSA Blind Signature Protocol is a two-party protocol between a
+   client and server where they interact to compute sig = Sign(sk,
+   input_msg), where input_msg = Prepare(msg) is a prepared version of
+   the private message msg provided by the client, and sk is the private
+   signing key provided by the server.  See Section 6.2 for details on
+   how sk is generated and used in this protocol.  Upon completion of
+   this protocol, the server learns nothing, whereas the client learns
+   sig.  In particular, this means the server learns nothing of msg or
+   input_msg and the client learns nothing of sk.
 
-Text adapted from Section 2.5 of {{BlindMy}}.
+The Finding Protocol uses a partially blind signature scheme in which
+the signature also covers an additional `info` value which is not
+kept secret from the signing server.
+
 
 ## Initial Pairing / Accessory Setup {#setup}
 
-During the pairing process, the Accessory `ACC` pairs with the Owner Device `OD` over Bluetooth. In this process, the `ACC` and `OD` must generate cryptographically secure keys that will allow for the `OD` to decrypt the `ACC` location reports.
+During the pairing process, the Accessory `ACC` pairs with the Owner
+Device `OD` over Bluetooth. In this process, the `ACC` and `OD` must
+generate cryptographically secure keys that will allow for the `OD` to
+decrypt the `ACC` location reports.
 
 ### Authenticity Verification
 
-Upon the initial pairing of the the `ACC` and `OD`, before the key generation process, the `OD` must facilitate communication with the `CN` to verify the authenticity of the `ACC`. In {{GMCKV21}}, it is recommended that the `ACC` has a private key material fused into the chip at manufacture time.
+Upon the initial pairing of the the `ACC` and `OD`, before the key
+generation process, the `OD` must facilitate communication with the
+`CN` to verify the authenticity of the `ACC`.
 
-In {{BlindMy}}, the principal of *Serial Unforgeability* is introduced, which recommends that the serial numbers are assigned as an unforgeable MAC that is computed with a secret key only known to the server.
+The precise details of this communication are implementation-dependent,
+but at the end of this process the `CN` must be able to verify that:
 
+1. The `ACC` is a legitimate (i.e., authorized) device.
+1. The `ACC` has not already been registered.
 
-(1)`OD` extracts the values (`Serial`<sub>i</sub>, `T`<sub>i</sub>) from `ACC`, where
-
-`T`<sub>i</sub> = MAC<sub>KSERIAL</sub>(`Serial`<sub>i</sub>)
-
-(2) `OD` transmits these values to `CN`.
-
-(3) `CN` independently verifies `T`<sub>i</sub>
-
-(4) To prevent re-enrollment of a tag, `CN` also checks `Serial`<sub>i</sub> ∉ `D`<sub>SERIAL</sub>
-
-(5) If (3) or (4) fails, `CN` aborts. Otherwise, `CN` adds `Serial`<sub>i</sub> to `D`<sub>SERIAL</sub>
-
-(6) `CN` sends public parameters for generating *N* partial blind signatures to `OD`. These parameters are defined in the next section.
+For instance, each `ACC` might be provisioned with a unique serial
+number which is digitally signed by the manufacturer, thus allowing
+the `CN` to verify legitimacy. The `CN` could use a database of
+registered serial numbers to prevent multiple registrations.
+Once registration is complete, there must be some mechanism for
+the `OD` to maintain continuity of authentication; this too is
+implementation specific.
 
 
 ### Key Generation and Signing with Partial Blind Signatures
 
-In order for `OD` to have *N* keys signed by partial blind signatures, the scheme described in {{BlindMy}} must be implemented.
+The `ACC` must periodically be provisioned with new temporal
+keys which FDs can then use to encrypt reports. Each temporal key
+is associated with a given timestamp value,
 
-For convenience, it is summarized below:
+Once the `ACC` has been authorized, the `ACC` (or `OD` on its behalf)
+needs to generate its temporal encryption keys `Y_i`. It then generates
+a signing request for the blinded version of each key.
 
-(1) `CN` generates the public parameters `u, d, s, a, b` where `u, d, s` represent the Signer State and `a, b` represents the Signature Parameters.
+contains two values:
 
-They are generated by the following code given in {{BlindMy}} *pbs_dh.py*:
+blindedKey
+: An opaque string representing the key to be signed, computed as below.
 
-~~~
-def raw_signer_gen_params(hashfunc, privkey, info):
-    u = randbelow(q)
-    d = randbelow(q)
-    s = randbelow(q)
-
-    z = hashToPoint(info, hashfunc)
-    a = pow(g, u, p)
-    b = (pow(g,s,p) * pow(z,d,p)) % p
-
-    return (u, d, s, a, b)
-~~~
-
-(2) After receiving the public parameters required from `CN`, `OD` generates N elliptic-curve keypairs, as shown in the code from {{BlindMy}} *client.py*:
+timestamp
+: The time value for the first time when the key will be used in
+  seconds since the UNIX epoch
 
 ~~~
-def gen_keys(privateseed: str, numkeys: int) -> List[str]:
-    print(f"Generating {numkeys} keys")
-    pubkeys = []
-    for i in tqdm(range(numkeys)):
-        pkey = hashToInt(privateseed + str(i), P224, sha256)
-        pubkey = pkey * P224.G
-        pubkeyx = '{:056x}'.format(pubkey.x)
-        pubkeys.append(pubkeyx)
-    return pubkeys
+blindedKey = Blind(pk, Y_i, info)
 ~~~
 
-(3) `OD` generates signing requests for each public key in *N*,using params *a* and *b*, the hashing function *H*, and the auxiliary info for each signing request set as the integer representation of the current day and the *N − 1* following days. These requests are then sent to `CN`. Notice that `OD` performs blinding on each public key before making the request.
+With the following inputs:
 
-This is shown in the code from {{BlindMy}} *pbs_dh.py*:
+pk
+: The public key for `CN`
+
+Y_i
+: The temporal key to be signed
+
+info
+: The timestamp value serialized as an unsigned 64-bit integer
+  in network byte order.
+
+CN returns a signature computed using:
 
 ~~~
-    #sigparams - SignatureParams object, comes from generate_params function above
-    #msg - string or bytes object representing the message being signed
-    #info - string representing the plaintext auxiliary information to go along with the blinded signature
-    def generate_signature_request(self, sigparams, msg, info):
-        t1, t2, t3, t4, e = raw_user_blind(self.hashfunc, self.pubkey, msg, info, sigparams.a, sigparams.b)
-        return UserState(t1, t2, t3, t4), e
+BlindSign(sk, blindedKey, info)
 ~~~
+
+With the following inputs
+
+sk
+: The secret key for `CN`
+
+blindedKey
+: The raw bytes of the blinded key provided by `CN`
 
 (4) `CN` verifies the timestamp infomation and aborts if not in a valid range.
 
