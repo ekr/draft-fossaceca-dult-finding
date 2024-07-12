@@ -180,8 +180,7 @@ At a high level, this works as follows:
   observe those payloads and if the payload is in a separated
   mode, reports its location to some central service ("crowdsourced network").
 
-- The owner ("Owner Device") queries the central service ("crowdsourced network") for the location of their
-  accessory.
+- The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.
 
 A naive implementation of this design exposes users to considerable
 privacy risk. In particular:
@@ -191,7 +190,7 @@ privacy risk. In particular:
   any accessory without the user's assistance, which is clearly
   undesirable.
 
-* Any attacker who can guess a tag ID can query the central server
+* Any attacker who can guess or determine a tag ID can query the central server
   for its location.
 
 * An attacker can surreptitiously plant an accessory on a target
@@ -246,11 +245,78 @@ There are a variety of different products on the market today that leverage a Cr
 
 These include:
 
-* Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
+### Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
 
-* Samsung and the SmartTag, as described in {{Samsung}}
+AirTags leverage rotating P224 public keys that are sent out as advertisements from the AirTag accessories (`ACC`) to nearby "Finder Devices" (`FD`s) on the Crowdsourced Network (`CN`). This public key allows the Finder Device to encrypt its own location information and send it to the `CN`, and the owner device is able to independently generate te correct decryption keys and request the encrypted reports from the `CN`.
 
-* Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
+The issues found with this implementation are the following:
+
+* There is no authentication that occurs between the `ACC` and the `FD` on the network, so counterfeit `ACC`s are able to leverage `FD`s to upload location reports to Apple's on their behalf `CN` for any `ACC` mimicking the protocol. There should be authentication that prevents a rogue or non-conforming/counterfeit `ACC` from causing an `FD` to generate a location report.
+
+* There is no authentication that occurs between `FD` and `CN`, further verifying the validity that the report being uploaded is from an authentic `FD`, besides the fact that it is coming from a TLS protected, certificate pinned connection.
+
+* Anyone can download an encrypted report from Apple's `CN`, as shown in {{Heinrich}}
+
+### Samsung and the SmartTag, as described in {{Samsung}}
+
+Each Samsung Smart Tags can advertise up to 51 different "private ids" that are tied to each specific `ACC` when they are outside of bluetooth range of the owner device. `FD`s are referred to as "online devices" or "helper devices", and these devices will send location reports to Samsung's `CN`, where there is an option to encrypt the location data.
+
+The issues found with this implementation, in addition to the issues described above are the following:
+
+* The privacy ids are easily enumerable, meaning that a stalker could permanently track a Smart Tag `ACC`.
+
+* The `CN` is easily susceptible to replay attacks from inauthentic `FD`s
+
+* It is possible for an `ACC` to be impersonated and pair with the `OD`.
+
+* There is sensitive, unique data that can be leaked by the GATT service used by an `FD` on an `ACC`
+
+* The `CN` (and therefore, Samsung) is able to trivially track `ACC` due to the sensitive information stored on the server (private device ID and location information)
+
+### Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
+
+These `CN`s are somewhat similar to each other because they all leverage apps to create their `CN`, rather than being built into the device operating system, as with Apple and Samsung. Because of this, it is a significant drawback for their `CN` network as participation of `FD`s is severely limited. However, there are certain security problems with this network that are important to discuss.
+
+Specifically, the authors identified various "security properties" that they believe to be an ideal `CN` benchmark, and defined those eight properties as follows:
+
+_(Definitions from {{GMCKV21}})_
+
+* _The `ACC` must able to recognize its owners_
+* _The `CN` must able to recognize the owners of a given `ACC`_
+* _Owning of a `ACC` must involve performing a physical action on the `ACC`_
+* _Registering as a owner of a `ACC` with the `CN` must involve communicating with the `ACC`_
+* _The `FD` can update the location of an `ACC` if and only if the `FD` can communicate with the `ACC`_
+* _It must be impossible to spoof a given `ACC`_
+* _It must be impossible to spoof a location by an`FD`_
+* _It must be impossible to spoof the `CN`_
+
+
+Their research then evaluated these existing `CN`s based on the benchmark they designed. The issues discovered were:
+
+* The TrackR, CUBE, Chipolo, and Pebblebee all allow for an `OD` to register an `ACC` with the `CN` without requiring any physical access to the `ACC` because the pairing/ registration process is too simplistic and only relies on the MAC address (or another static ID) of the device, which allows anyone to register as the owner of any arbitrary `ACC`.
+
+* All of the of the `CN`s (except for Tile) simply track `ACC`s with static identifiers of the device so like the Samsung network, the `CN`s can track arbitrary `ACC` locations
+
+* Most of the `CN`s blindly trust received location reports from `FD`s without verifying physical proximity to the `ACC`.
+
+## Prior Research
+
+There is substantial research into stalking via the FindMy protocol and overall protocol deficiencies that have been described in multiple bodies of work, such as:
+
+* Open Haystack, counterfeit devices
+
+* Who Can Find
+
+* Who Tracks
+
+* Matthew Green?
+
+* Others?
+
+
+There are some suggested improvements, such as the security properties described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also suggested fusing a private key into the `ACC` to make it more difficult to spoof, and requiring that location updates be signed.
+
+{{BlindMy}} set out to design
 
 
 
@@ -316,7 +382,7 @@ o          o                  │ │              │ │                 ~- . 
 ~~~~
 {: #fig-protocol-overview title="Protocol Overview"}
 
-As part of the setup phase ({{setup}} the accessory and
+As part of the setup phase ({{setup}}) the accessory and
 owning device are paired, establishing a shared key `SK`
 which is known to both the accessory and the owning device.
 The rest of the protocol proceeeds as follows.
