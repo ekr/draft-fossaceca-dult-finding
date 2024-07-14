@@ -1035,7 +1035,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fossaceca &amp; Rescorla</td>
-<td class="center">Expires 13 January 2025</td>
+<td class="center">Expires 15 January 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1048,12 +1048,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-fossaceca-dult-finding-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-12" class="published">12 July 2024</time>
+<time datetime="2024-07-14" class="published">14 July 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-01-13">13 January 2025</time></dd>
+<dd class="expires"><time datetime="2025-01-15">15 January 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1114,7 +1114,7 @@ they have seen and by which owners look up their location.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 13 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 January 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1284,7 +1284,7 @@ the accessory is separated from its owner and thus potentially lost.<a href="#se
         <li class="normal" id="section-1-3.2">
           <p id="section-1-3.2.1">Devices belonging to other users ("Non-Owner Devices" or "Finder Devices")
 observe those payloads and if the payload is in a separated
-mode, reports its location to some central service ("crowdsourced network").<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
+mode, reports its location to some central service ("Crowdsourced Network").<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-3.3">
           <p id="section-1-3.3.1">The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.<a href="#section-1-3.3.1" class="pilcrow">¶</a></p>
@@ -1474,26 +1474,28 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
         <h3 id="name-prior-research">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-prior-research" class="section-name selfRef">Prior Research</a>
         </h3>
-<p id="section-2.3-1">There is substantial research into stalking via the FindMy protocol and overall protocol deficiencies that have been described in multiple bodies of work, such as:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">There is substantial research into stalking via the FindMy protocol and overall crowdsourced network protocol deficiencies have been described in multiple bodies of work, such as:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3-2.1">
-            <p id="section-2.3-2.1.1">Open Haystack, counterfeit devices<a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.1.1"><span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span><a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.3-2.2">
-            <p id="section-2.3-2.2.1">Who Can Find<a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.2.1"><span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span><a href="#section-2.3-2.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.3-2.3">
-            <p id="section-2.3-2.3.1">Who Tracks<a href="#section-2.3-2.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.3.1"><span>[<a href="#WhoTracks" class="cite xref">WhoTracks</a>]</span><a href="#section-2.3-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.3-2.4">
-            <p id="section-2.3-2.4.1">Matthew Green?<a href="#section-2.3-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.4.1"><span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span><a href="#section-2.3-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.3-2.5">
-            <p id="section-2.3-2.5.1">Others?<a href="#section-2.3-2.5.1" class="pilcrow">¶</a></p>
+            <p id="section-2.3-2.5.1"><span>[<a href="#Beck" class="cite xref">Beck</a>]</span><a href="#section-2.3-2.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-2.3-3">There are some suggested improvements, such as the security properties described in <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> above.  The authors of <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> also suggested fusing a private key into the <code>ACC</code> to make it more difficult to spoof, and requiring that location updates be signed.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.3-4"><span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> set out to design<a href="#section-2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3-3">and others.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.3-4">There are some suggested improvements, such as the security properties described in <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> above.  The authors of <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> also suggested fusing a private key into the <code>ACC</code> to make it more difficult to spoof, and requiring that location updates be signed.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3-5"><span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span> and <span>[<a href="#WhoTracks" class="cite xref">WhoTracks</a>]</span> pointed out early deficiencies in the protocol, which <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> set out to solve. By introducing a Blind Signature scheme, the authors sought to overcome an attacker leveraging a large amount of keys to avoid triggering the anti-tracking framework.  In this implementation, keys were predetermined for a set interval, and signed by the server, such that a specific, presigned key can only be used during a pre-determined interval. The drawback of this approach is that the authentication is left to the <code>OD</code> and the <code>CN</code>, and the <code>CN</code> does not do any authentication with the <code>FD</code>, so it still could store forged location reports. Additionally, the <code>FD</code> does not do any authentication with the <code>ACC</code>, which means that it could potentially interact with counterfeit <code>ACC</code> devices.<a href="#section-2.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3-6"><span>[<a href="#Beck" class="cite xref">Beck</a>]</span> introduces the idea of Multi-Dealer Secret Sharing (MDSS) as a privacy preserving protocol that should also be considered.<a href="#section-2.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1511,7 +1513,7 @@ appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶<
 definitions of the various system components.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">Accessory (ACC): This is the device which will be tracked. It is assumed to lack direct internet access and GPS, but will possess Bluetooth Low Energy capabilities, which it uses to send advertisement messages. The accessory protocol is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <p id="section-3-4">Advertisement: This is the message that is sent over the BLE Protocol from the Accessory<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Dinder Devices.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-5">Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Finder Devices.<a href="#section-3-5" class="pilcrow">¶</a></p>
 <p id="section-3-6">Finder Device (FD): This is a device that is a non-owner device that contributes information about an accessory to the crowdsourced network.<a href="#section-3-6" class="pilcrow">¶</a></p>
 <p id="section-3-7">Owner Device (OD): This is the device which owns the accessory, and to which it is paired. There can be multiple owner devices, however, the security of that implementation is outside of the scope of this document.<a href="#section-3-7" class="pilcrow">¶</a></p>
 </section>
@@ -1568,7 +1570,7 @@ o          o                  │ │              │ │                 ~- . 
 <p id="section-4-4">As part of the setup phase (<a href="#setup" class="auto internal xref">Section 5.4</a>) the accessory and
 owning device are paired, establishing a shared key <code>SK</code>
 which is known to both the accessory and the owning device.
-The rest of the protocol proceeeds as follows.<a href="#section-4-4" class="pilcrow">¶</a></p>
+The rest of the protocol proceeds as follows.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-5.1">
           <p id="section-4-5.1.1">The accessory periodically sends out an advertisement which contains
@@ -1579,8 +1581,8 @@ for (e.g., a one hour window). <code>Y_i</code> and its corresponding private ke
 </li>
         <li class="normal" id="section-4-5.2">
           <p id="section-4-5.2.1">In order to report an accessory's location at time <code>i</code> a non-owning
-device encrypts it under <code>Y_i</code> and transmits the pair
-<code>( E(Y_i, location), Y_i )</code> to the central service.<a href="#section-4-5.2.1" class="pilcrow">¶</a></p>
+device <code>FD</code> encrypts it under <code>Y_i</code> and transmits the pair
+<code>( E(Y_i, location), Y_i )</code> to the central service <code>CN</code>.<a href="#section-4-5.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-5.3">
           <p id="section-4-5.3.1">In order to locate an accessory at time <code>i</code>, the owner uses <code>SK</code> to
@@ -1602,7 +1604,7 @@ the central service, which just sees encrypted reports.<a href="#section-4-7.1.1
 across multiple epochs without knowing the shared key <code>SK</code>,
 which is only know to the owner. However, an observer who
 sees multiple beacons within the same epoch can correlate
-them, as they will have the same <code>Y_i</code>. However, fast
+them, as they will have the same <code>Y_i</code>. However, fast key
 rotation also makes it more difficult to detect unwanted
 tracking, which relies on multiple observations of the
 same identifier over time.<a href="#section-4-7.2.1" class="pilcrow">¶</a></p>
@@ -1721,14 +1723,15 @@ spatially separated devices to reduce the per-device cost.
 <p id="section-5.1-2">1) <strong>Initial Pairing / Accessory Setup</strong><a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1-3">In this phase, the Accessory <code>ACC</code> is paired with the Owner Device <code>OD</code>, and verified as authentic with the Crowdsourced Network <code>CN</code><a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">2) <strong>Accessory in Nearby Owner Mode</strong><a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">In this phase, the Accessory <code>ACC</code> is within Bluetooth range of the Owner Device <code>OD</code>. In this phase, Finder Devices <code>FDs</code> <span class="bcp14">SHALL NOT</span> generate location reports to send to the Crownsourced Network <code>CN</code>. The Accessory <span class="bcp14">SHALL</span> behave as defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">In this phase, the Accessory <code>ACC</code> is within Bluetooth range of the Owner Device <code>OD</code>. In this phase, Finder Devices <code>FDs</code> <span class="bcp14">SHALL NOT</span> generate location reports to send to the Crowdsourced Network <code>CN</code>. The Accessory <span class="bcp14">SHALL</span> behave as defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>. [[OPEN ISSUE: Need to make sure that walking around with an AirTag in Nearby Mode does not allow for stalking]]<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <p id="section-5.1-6">3) <strong>Accessory in Separated (Lost) Mode</strong><a href="#section-5.1-6" class="pilcrow">¶</a></p>
 <p id="section-5.1-7">In this phase, the Accessory <code>ACC</code> is not within Bluetooth raange fo the Owner Device <code>OD</code>, therefore, the accessory must generate "lost" messages to be received by Finder Devices <code>FD</code>, as described in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
 <p id="section-5.1-8">4) <strong>Finder Device creates a location report</strong><a href="#section-5.1-8" class="pilcrow">¶</a></p>
 <p id="section-5.1-9">Finder Device <code>FD</code> receives a Bluetooth packet, and uploads a location report to the Crowdsourced Network <code>CN</code> if and only if it is confirmed to be a valid location report.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.1-10">*(Should this be confirmed by the FD, or the CN? or Both?)<a href="#section-5.1-10" class="pilcrow">¶</a></p>
-<p id="section-5.1-11">5) <strong>Owner Device queries the Crowdsourced Network</strong><a href="#section-5.1-11" class="pilcrow">¶</a></p>
-<p id="section-5.1-12">Owner Device <code>OD</code> queries the Crowdsourced Network <code>CN</code> for the encrypted location report.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or Both?]]<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+<p id="section-5.1-11">[[OPEN ISSUE: Should there be auth between <code>FD</code> and <code>ACC</code> as well as <code>FD</code> and <code>CN</code>]]<a href="#section-5.1-11" class="pilcrow">¶</a></p>
+<p id="section-5.1-12">5) <strong>Owner Device queries the Crowdsourced Network</strong><a href="#section-5.1-12" class="pilcrow">¶</a></p>
+<p id="section-5.1-13">Owner Device <code>OD</code> queries the Crowdsourced Network <code>CN</code> for the encrypted location report.<a href="#section-5.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="general-protocol-infrastructure-properties">
@@ -1751,7 +1754,8 @@ function <em>H</em>.<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
             <p id="section-5.2-2.3.1"><code>CN</code> has a private symmetric encryption key K<sub>SERIAL</sub>.<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-2.4">
-            <p id="section-5.2-2.4.1"><code>CN</code> maintains a database of registered serial values D<sub>SERIAL</sub><a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-2.4.1"><code>CN</code> maintains a database of registered serial values D<sub>SERIAL</sub>
+[[OPEN ISSUE: Does this create a privacy concern? ]]<a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-2.5">
             <p id="section-5.2-2.5.1">Each Accessory <code>ACC</code><sub>i</sub> is provisioned with a unique
@@ -1880,27 +1884,28 @@ While the details are implementation dependent, this generally involves
 enforcing rate limits on how many keys can be signed with timestamps
 within a given window. Once the <code>CN</code> is satisfied with the submission
 it constructs a blind signature as shown below and returns it to the <code>OD</code>.<a href="#section-5.4.2-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.4.2-9">
+<p id="section-5.4.2-9">[[OPEN ISSUE: Is it safe for <code>ACC</code> to hold all of the precomputed keys? Or does this create a privacy issue? ]]<a href="#section-5.4.2-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5.4.2-10">
 <pre>
     BlindSign(sk, blindedKey, info)
-</pre><a href="#section-5.4.2-9" class="pilcrow">¶</a>
+</pre><a href="#section-5.4.2-10" class="pilcrow">¶</a>
 </div>
-<p id="section-5.4.2-10">With the following inputs<a href="#section-5.4.2-10" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-5.4.2-11">
-            <dt id="section-5.4.2-11.1">sk</dt>
-            <dd style="margin-left: 1.5em" id="section-5.4.2-11.2">
-              <p id="section-5.4.2-11.2.1">The secret key for <code>CN</code><a href="#section-5.4.2-11.2.1" class="pilcrow">¶</a></p>
+<p id="section-5.4.2-11">With the following inputs<a href="#section-5.4.2-11" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-5.4.2-12">
+            <dt id="section-5.4.2-12.1">sk</dt>
+            <dd style="margin-left: 1.5em" id="section-5.4.2-12.2">
+              <p id="section-5.4.2-12.2.1">The secret key for <code>CN</code><a href="#section-5.4.2-12.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
-<dt id="section-5.4.2-11.3">blindedKey</dt>
-            <dd style="margin-left: 1.5em" id="section-5.4.2-11.4">
-              <p id="section-5.4.2-11.4.1">The raw bytes of the blinded key provided by <code>CN</code><a href="#section-5.4.2-11.4.1" class="pilcrow">¶</a></p>
+<dt id="section-5.4.2-12.3">blindedKey</dt>
+            <dd style="margin-left: 1.5em" id="section-5.4.2-12.4">
+              <p id="section-5.4.2-12.4.1">The raw bytes of the blinded key provided by <code>CN</code><a href="#section-5.4.2-12.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-5.4.2-12">Upon receiving the signed blinded key, the <code>OD</code> unblinds the signature
+<p id="section-5.4.2-13">Upon receiving the signed blinded key, the <code>OD</code> unblinds the signature
 and stores it. If the <code>OD</code> generated <code>Y_i</code>, it must also transfer it
-to the <code>ACC</code>. Note that <code>ACC</code> does not need a copy of the signature.<a href="#section-5.4.2-12" class="pilcrow">¶</a></p>
+to the <code>ACC</code>. Note that <code>ACC</code> does not need a copy of the signature.<a href="#section-5.4.2-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accessory-in-nearby-owner-mode">
@@ -1969,7 +1974,7 @@ acceptable period of time (e.g., one week) from the current time
             <p id="section-5.6-5.3.1">Retrieve all reports matching the provided <code>Y_i</code><a href="#section-5.6-5.3.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.6-5.4">
-            <p id="section-5.6-5.4.1">Remove all reports which have timestamps are within the acceptable
+            <p id="section-5.6-5.4.1">Remove all reports which have timestamps that are not within the acceptable
 time use window for the key, as indicated by the key's timestamp.<a href="#section-5.6-5.4.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-5.6-5.5">
@@ -2012,7 +2017,7 @@ attacker must purchase multiple devices. However, they may be able
 to provision the keys from multiple valid devices onto the same device,
 thus achieving a rotation rate increase at linear cost.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4">Note that enforcement of this rate limit happens only on the <code>CN</code>: the
-FD does not check. An attacker can generate advertisements with
+<code>FD</code> does not check. An attacker can generate advertisements with
 unsigned keys -- and thus at any rotation rate it chooses -- and the
 <code>FD</code> will duly send valid reports encrypted under those keys. The <code>CN</code>
 will store them but because the attacker will not be able to produce
@@ -2076,6 +2081,10 @@ know the private keys in order to decrypt the reports.<a href="#section-6.1-5" c
 <a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="Beck">[Beck]</dt>
+        <dd>
+<span class="refAuthor">Gabrielle Beck</span>, <span class="refAuthor">Harry Eldridge</span>, <span class="refAuthor">Matthew Green</span>, <span class="refAuthor">Nadia Heninger</span>, and <span class="refAuthor">Abishek Jain</span>, <span class="refTitle">"Abuse-Resistant Location Tracking: Balancing Privacy and Safety in the Offline Finding Ecosystem"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://eprint.iacr.org/2023/1332.pdf">https://eprint.iacr.org/2023/1332.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="BlindMy">[BlindMy]</dt>
         <dd>
 <span class="refAuthor">Travis Mayberry</span>, <span class="refAuthor">Erik-Oliver Blass</span>, and <span class="refAuthor">Ellis Fenske</span>, <span class="refTitle">"Blind My — An Improved Cryptographic Protocol to Prevent Stalking in Apple’s Find My Network"</span>, <time datetime="2023" class="refDate">2023</time>, <span>&lt;<a href="https://petsymposium.org/popets/2023/popets-2023-0006.pdf">https://petsymposium.org/popets/2023/popets-2023-0006.pdf</a>&gt;</span>. </dd>
@@ -2095,10 +2104,6 @@ know the private keys in order to decrypt the reports.<a href="#section-6.1-5" c
 <dt id="Heinrich">[Heinrich]</dt>
         <dd>
 <span class="refAuthor">Alexander Heinrich</span>, <span class="refAuthor">Milan Stute</span>, <span class="refAuthor">Tim Kornhuber</span>, and <span class="refAuthor">Matthias Hollick</span>, <span class="refTitle">"Who Can Find My Devices? Security and Privacy of Apple's Crowd-Sourced Bluetooth Location Tracking System"</span>, <time datetime="2021" class="refDate">2021</time>, <span>&lt;<a href="https://petsymposium.org/popets/2021/popets-2021-0045.pdf">https://petsymposium.org/popets/2021/popets-2021-0045.pdf</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="Okamoto">[Okamoto]</dt>
-        <dd>
-<span class="refAuthor">Tatsuaki Okamoto</span>, <span class="refTitle">"Efficient blind and partially blind signatures without random oracles"</span>, <time datetime="2006" class="refDate">2006</time>, <span>&lt;<a href="https://link.springer.com/chapter/10.1007/11681878_5">https://link.springer.com/chapter/10.1007/11681878_5</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9298">[RFC9298]</dt>
         <dd>
