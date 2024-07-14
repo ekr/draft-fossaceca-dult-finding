@@ -86,14 +86,6 @@ informative:
        -
          ins: S.P. Polatkan
 
-  Okamoto:
-       title: "Efficient blind and partially blind signatures without random oracles"
-       date: 2006
-       target: https://link.springer.com/chapter/10.1007/11681878_5
-       author:
-       -
-         ins: Tatsuaki Okamoto
-
   Heinrich:
        title: "Who Can Find My Devices? Security and Privacy of Apple's Crowd-Sourced Bluetooth Location Tracking System"
        date: 2021
@@ -144,6 +136,21 @@ informative:
          ins: Alwen Tiu
        -
          ins: Thomas Haines
+  Beck:
+       title: "Abuse-Resistant Location Tracking: Balancing Privacy and Safety in the Offline Finding Ecosystem"
+       date: 2023
+       target: https://eprint.iacr.org/2023/1332.pdf
+       author:
+       -
+         ins: Gabrielle Beck
+       -
+         ins: Harry Eldridge
+       -
+         ins: Matthew Green
+       -
+         ins: Nadia Heninger
+       -
+         ins: Abishek Jain
 
 
 --- abstract
@@ -178,7 +185,7 @@ At a high level, this works as follows:
 
 - Devices belonging to other users ("Non-Owner Devices" or "Finder Devices")
   observe those payloads and if the payload is in a separated
-  mode, reports its location to some central service ("crowdsourced network").
+  mode, reports its location to some central service ("Crowdsourced Network").
 
 - The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.
 
@@ -301,22 +308,26 @@ Their research then evaluated these existing `CN`s based on the benchmark they d
 
 ## Prior Research
 
-There is substantial research into stalking via the FindMy protocol and overall protocol deficiencies that have been described in multiple bodies of work, such as:
+There is substantial research into stalking via the FindMy protocol and overall crowdsourced network protocol deficiencies have been described in multiple bodies of work, such as:
 
-* Open Haystack, counterfeit devices
+* {{GMCKV21}}
 
-* Who Can Find
+* {{Heinrich}}
 
-* Who Tracks
+* {{WhoTracks}}
 
-* Matthew Green?
+* {{BlindMy}}
 
-* Others?
+* {{Beck}}
 
+and others.
 
 There are some suggested improvements, such as the security properties described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also suggested fusing a private key into the `ACC` to make it more difficult to spoof, and requiring that location updates be signed.
 
-{{BlindMy}} set out to design
+{{Heinrich}} and {{WhoTracks}} pointed out early deficiencies in the protocol, which {{BlindMy}} set out to solve. By introducing a Blind Signature scheme, the authors sought to overcome an attacker leveraging a large amount of keys to avoid triggering the anti-tracking framework.  In this implementation, keys were predetermined for a set interval, and signed by the server, such that a specific, presigned key can only be used during a pre-determined interval. The drawback of this approach is that the authentication is left to the `OD` and the `CN`, and the `CN` does not do any authentication with the `FD`, so it still could store forged location reports. Additionally, the `FD` does not do any authentication with the `ACC`, which means that it could potentially interact with counterfeit `ACC` devices.
+
+
+{{Beck}} introduces the idea of Multi-Dealer Secret Sharing (MDSS) as a privacy preserving protocol that should also be considered.
 
 
 
@@ -332,7 +343,7 @@ Accessory (ACC): This is the device which will be tracked. It is assumed to lack
 
 Advertisement: This is the message that is sent over the BLE Protocol from the Accessory
 
-Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Dinder Devices.
+Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Finder Devices.
 
 Finder Device (FD): This is a device that is a non-owner device that contributes information about an accessory to the crowdsourced network.
 
@@ -385,7 +396,7 @@ o          o                  │ │              │ │                 ~- . 
 As part of the setup phase ({{setup}}) the accessory and
 owning device are paired, establishing a shared key `SK`
 which is known to both the accessory and the owning device.
-The rest of the protocol proceeeds as follows.
+The rest of the protocol proceeds as follows.
 
 * The accessory periodically sends out an advertisement which contains
 an ephemeral public key `Y_i` where `i` is the epoch the key is valid
@@ -394,8 +405,8 @@ for (e.g., a one hour window). `Y_i` and its corresponding private key
 `i` (conceptually as a `X_i = PRF(SK, i)`).
 
 * In order to report an accessory's location at time `i` a non-owning
-device encrypts it under `Y_i` and transmits the pair
-`( E(Y_i, location), Y_i )` to the central service.
+device `FD` encrypts it under `Y_i` and transmits the pair
+`( E(Y_i, location), Y_i )` to the central service `CN`.
 
 * In order to locate an accessory at time `i`, the owner uses `SK` to
 compute `(X_i, Y_i)` and then sends `Y_i` to the central service.
@@ -414,7 +425,7 @@ over a naive design:
    across multiple epochs without knowing the shared key `SK`,
    which is only know to the owner. However, an observer who
    sees multiple beacons within the same epoch can correlate
-   them, as they will have the same `Y_i`. However, fast
+   them, as they will have the same `Y_i`. However, fast key
    rotation also makes it more difficult to detect unwanted
    tracking, which relies on multiple observations of the
    same identifier over time.
@@ -518,7 +529,7 @@ In this phase, the Accessory `ACC` is paired with the Owner Device `OD`, and ver
 
 2) __Accessory in Nearby Owner Mode__
 
-In this phase, the Accessory `ACC` is within Bluetooth range of the Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT generate location reports to send to the Crownsourced Network `CN`. The Accessory SHALL behave as defined in {{DultDoc3}}.
+In this phase, the Accessory `ACC` is within Bluetooth range of the Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT generate location reports to send to the Crowdsourced Network `CN`. The Accessory SHALL behave as defined in {{DultDoc3}}. [[OPEN ISSUE: Need to make sure that walking around with an AirTag in Nearby Mode does not allow for stalking]]
 
 3) __Accessory in Separated (Lost) Mode__
 
@@ -528,7 +539,9 @@ In this phase, the Accessory `ACC` is not within Bluetooth raange fo the Owner D
 
 Finder Device `FD` receives a Bluetooth packet, and uploads a location report to the Crowdsourced Network `CN` if and only if it is confirmed to be a valid location report.
 
-*(Should this be confirmed by the FD, or the CN? or Both?)
+[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or Both?]]
+
+[[OPEN ISSUE: Should there be auth between `FD` and `ACC` as well as `FD` and `CN`]]
 
 5) __Owner Device queries the Crowdsourced Network__
 
@@ -549,6 +562,7 @@ function *H*.
 - `CN` has a private symmetric encryption key K<sub>SERIAL</sub>.
 
 - `CN` maintains a database of registered serial values D<sub>SERIAL</sub>
+[[OPEN ISSUE: Does this create a privacy concern? ]]
 
 -  Each Accessory `ACC`<sub>i</sub> is provisioned with a unique
    serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>),
@@ -650,6 +664,8 @@ enforcing rate limits on how many keys can be signed with timestamps
 within a given window. Once the `CN` is satisfied with the submission
 it constructs a blind signature as shown below and returns it to the `OD`.
 
+[[OPEN ISSUE: Is it safe for `ACC` to hold all of the precomputed keys? Or does this create a privacy issue? ]]
+
 ~~~~
     BlindSign(sk, blindedKey, info)
 ~~~~
@@ -713,7 +729,7 @@ The CN then proceeds as follows:
    acceptable period of time (e.g., one week) from the current time
    [[OPEN ISSUE: Why do we need this step?]]
 1. Retrieve all reports matching the provided `Y_i`
-1. Remove all reports which have timestamps are within the acceptable
+1. Remove all reports which have timestamps that are not within the acceptable
    time use window for the key, as indicated by the key's timestamp.
 1. Return the remaining reports to `OD`.
 
@@ -758,7 +774,7 @@ to provision the keys from multiple valid devices onto the same device,
 thus achieving a rotation rate increase at linear cost.
 
 Note that enforcement of this rate limit happens only on the `CN`: the
-FD does not check. An attacker can generate advertisements with
+`FD` does not check. An attacker can generate advertisements with
 unsigned keys -- and thus at any rotation rate it chooses -- and the
 `FD` will duly send valid reports encrypted under those keys. The `CN`
 will store them but because the attacker will not be able to produce
