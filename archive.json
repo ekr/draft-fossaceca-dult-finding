@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-14T00:24:36.323833+00:00",
+  "timestamp": "2024-07-16T00:22:03.995391+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -243,6 +243,32 @@
       "mergeCommit": {
         "oid": "23882dc84e0e033d20ecf0108ec97b0bbaebcf61"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOLlgmts51TwSd",
+      "title": "Feedback/ Additions",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/8",
+      "state": "OPEN",
+      "author": "cfossace",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "- I added some protocol summaries of FindMy, SmartTags, and Tile(and the other App based networks)\r\n(are these necessary? I think they give good context) \r\n\r\n-Briefly introduced  \u201cWho Tracks the Trackers\u201d paper to give some more context to the rate limiting/ changing key issue that the  BlindMy protocol attempts to address, and then discussed the additional drawbacks discussed in the BlindMy protocol \r\n\r\n-random minor changes in spelling/ notation\r\n\r\nDid not do security considerations because those felt addressed in the other sections? ",
+      "createdAt": "2024-07-14T02:55:47Z",
+      "updatedAt": "2024-07-14T02:55:48Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "cac78cd309f3e5b85f414e479e3ef45256d3b003",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "cf_updates_protocol_summaries",
+      "headRefOid": "3385a33b866cec495a73f35c5e0a0b03fd77de87",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
