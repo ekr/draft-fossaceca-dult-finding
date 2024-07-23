@@ -86,14 +86,6 @@ informative:
        -
          ins: S.P. Polatkan
 
-  Okamoto:
-       title: "Efficient blind and partially blind signatures without random oracles"
-       date: 2006
-       target: https://link.springer.com/chapter/10.1007/11681878_5
-       author:
-       -
-         ins: Tatsuaki Okamoto
-
   Heinrich:
        title: "Who Can Find My Devices? Security and Privacy of Apple's Crowd-Sourced Bluetooth Location Tracking System"
        date: 2021
@@ -144,6 +136,21 @@ informative:
          ins: Alwen Tiu
        -
          ins: Thomas Haines
+  Beck:
+       title: "Abuse-Resistant Location Tracking: Balancing Privacy and Safety in the Offline Finding Ecosystem"
+       date: 2023
+       target: https://eprint.iacr.org/2023/1332.pdf
+       author:
+       -
+         ins: Gabrielle Beck
+       -
+         ins: Harry Eldridge
+       -
+         ins: Matthew Green
+       -
+         ins: Nadia Heninger
+       -
+         ins: Abishek Jain
 
 
 --- abstract
@@ -178,10 +185,9 @@ At a high level, this works as follows:
 
 - Devices belonging to other users ("Non-Owner Devices" or "Finder Devices")
   observe those payloads and if the payload is in a separated
-  mode, reports its location to some central service ("crowdsourced network").
+  mode, reports its location to some central service ("Crowdsourced Network").
 
-- The owner ("Owner Device") queries the central service ("crowdsourced network") for the location of their
-  accessory.
+- The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.
 
 A naive implementation of this design exposes users to considerable
 privacy risk. In particular:
@@ -191,7 +197,7 @@ privacy risk. In particular:
   any accessory without the user's assistance, which is clearly
   undesirable.
 
-* Any attacker who can guess a tag ID can query the central server
+* Any attacker who can guess or determine a tag ID can query the central server
   for its location.
 
 * An attacker can surreptitiously plant an accessory on a target
@@ -215,7 +221,8 @@ This document defines a cryptographic reporting and finding protocol
 which is intended to minimize these privacy risks. It is intended
 to work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
-detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in {{BlindMy}} and {{GMCKV21}}.
+detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in {{BlindMy}} and {{GMCKV21}} and closely follows
+the design of {{BlindMy}}.
 
 
 # Motivations
@@ -245,11 +252,82 @@ There are a variety of different products on the market today that leverage a Cr
 
 These include:
 
-* Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
+### Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
 
-* Samsung and the SmartTag, as described in {{Samsung}}
+AirTags leverage rotating P224 public keys that are sent out as advertisements from the AirTag accessories (`ACC`) to nearby "Finder Devices" (`FD`s) on the Crowdsourced Network (`CN`). This public key allows the Finder Device to encrypt its own location information and send it to the `CN`, and the owner device is able to independently generate te correct decryption keys and request the encrypted reports from the `CN`.
 
-* Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
+The issues found with this implementation are the following:
+
+* There is no authentication that occurs between the `ACC` and the `FD` on the network, so counterfeit `ACC`s are able to leverage `FD`s to upload location reports to Apple's on their behalf `CN` for any `ACC` mimicking the protocol. There should be authentication that prevents a rogue or non-conforming/counterfeit `ACC` from causing an `FD` to generate a location report.
+
+* There is no authentication that occurs between `FD` and `CN`, further verifying the validity that the report being uploaded is from an authentic `FD`, besides the fact that it is coming from a TLS protected, certificate pinned connection.
+
+* Anyone can download an encrypted report from Apple's `CN`, as shown in {{Heinrich}}
+
+### Samsung and the SmartTag, as described in {{Samsung}}
+
+Each Samsung Smart Tags can advertise up to 51 different "private ids" that are tied to each specific `ACC` when they are outside of bluetooth range of the owner device. `FD`s are referred to as "online devices" or "helper devices", and these devices will send location reports to Samsung's `CN`, where there is an option to encrypt the location data.
+
+The issues found with this implementation, in addition to the issues described above are the following:
+
+* The privacy ids are easily enumerable, meaning that a stalker could permanently track a Smart Tag `ACC`.
+
+* The `CN` is easily susceptible to replay attacks from inauthentic `FD`s
+
+* It is possible for an `ACC` to be impersonated and pair with the `OD`.
+
+* There is sensitive, unique data that can be leaked by the GATT service used by an `FD` on an `ACC`
+
+* The `CN` (and therefore, Samsung) is able to trivially track `ACC` due to the sensitive information stored on the server (private device ID and location information)
+
+### Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
+
+These `CN`s are somewhat similar to each other because they all leverage apps to create their `CN`, rather than being built into the device operating system, as with Apple and Samsung. Because of this, it is a significant drawback for their `CN` network as participation of `FD`s is severely limited. However, there are certain security problems with this network that are important to discuss.
+
+Specifically, the authors identified various "security properties" that they believe to be an ideal `CN` benchmark, and defined those eight properties as follows:
+
+_(Definitions from {{GMCKV21}})_
+
+* _The `ACC` must able to recognize its owners_
+* _The `CN` must able to recognize the owners of a given `ACC`_
+* _Owning of a `ACC` must involve performing a physical action on the `ACC`_
+* _Registering as a owner of a `ACC` with the `CN` must involve communicating with the `ACC`_
+* _The `FD` can update the location of an `ACC` if and only if the `FD` can communicate with the `ACC`_
+* _It must be impossible to spoof a given `ACC`_
+* _It must be impossible to spoof a location by an`FD`_
+* _It must be impossible to spoof the `CN`_
+
+
+Their research then evaluated these existing `CN`s based on the benchmark they designed. The issues discovered were:
+
+* The TrackR, CUBE, Chipolo, and Pebblebee all allow for an `OD` to register an `ACC` with the `CN` without requiring any physical access to the `ACC` because the pairing/ registration process is too simplistic and only relies on the MAC address (or another static ID) of the device, which allows anyone to register as the owner of any arbitrary `ACC`.
+
+* All of the of the `CN`s (except for Tile) simply track `ACC`s with static identifiers of the device so like the Samsung network, the `CN`s can track arbitrary `ACC` locations
+
+* Most of the `CN`s blindly trust received location reports from `FD`s without verifying physical proximity to the `ACC`.
+
+## Prior Research
+
+There is substantial research into stalking via the FindMy protocol and overall crowdsourced network protocol deficiencies have been described in multiple bodies of work, such as:
+
+* {{GMCKV21}}
+
+* {{Heinrich}}
+
+* {{WhoTracks}}
+
+* {{BlindMy}}
+
+* {{Beck}}
+
+and others.
+
+There are some suggested improvements, such as the security properties described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also suggested fusing a private key into the `ACC` to make it more difficult to spoof, and requiring that location updates be signed.
+
+{{Heinrich}} and {{WhoTracks}} pointed out early deficiencies in the protocol, which {{BlindMy}} set out to solve. By introducing a Blind Signature scheme, the authors sought to overcome an attacker leveraging a large amount of keys to avoid triggering the anti-tracking framework.  In this implementation, keys were predetermined for a set interval, and signed by the server, such that a specific, presigned key can only be used during a pre-determined interval. The drawback of this approach is that the authentication is left to the `OD` and the `CN`, and the `CN` does not do any authentication with the `FD`, so it still could store forged location reports. Additionally, the `FD` does not do any authentication with the `ACC`, which means that it could potentially interact with counterfeit `ACC` devices.
+
+
+{{Beck}} introduces the idea of Multi-Dealer Secret Sharing (MDSS) as a privacy preserving protocol that should also be considered.
 
 
 
@@ -265,7 +343,7 @@ Accessory (ACC): This is the device which will be tracked. It is assumed to lack
 
 Advertisement: This is the message that is sent over the BLE Protocol from the Accessory
 
-Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Dinder Devices.
+Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Finder Devices.
 
 Finder Device (FD): This is a device that is a non-owner device that contributes information about an accessory to the crowdsourced network.
 
@@ -315,10 +393,10 @@ o          o                  │ │              │ │                 ~- . 
 ~~~~
 {: #fig-protocol-overview title="Protocol Overview"}
 
-As part of the setup phase ({{setup}} the accessory and
+As part of the setup phase ({{setup}}) the accessory and
 owning device are paired, establishing a shared key `SK`
 which is known to both the accessory and the owning device.
-The rest of the protocol proceeeds as follows.
+The rest of the protocol proceeds as follows.
 
 * The accessory periodically sends out an advertisement which contains
 an ephemeral public key `Y_i` where `i` is the epoch the key is valid
@@ -327,8 +405,8 @@ for (e.g., a one hour window). `Y_i` and its corresponding private key
 `i` (conceptually as a `X_i = PRF(SK, i)`).
 
 * In order to report an accessory's location at time `i` a non-owning
-device encrypts it under `Y_i` and transmits the pair
-`( E(Y_i, location), Y_i )` to the central service.
+device `FD` encrypts it under `Y_i` and transmits the pair
+`( E(Y_i, location), Y_i )` to the central service `CN`.
 
 * In order to locate an accessory at time `i`, the owner uses `SK` to
 compute `(X_i, Y_i)` and then sends `Y_i` to the central service.
@@ -347,7 +425,7 @@ over a naive design:
    across multiple epochs without knowing the shared key `SK`,
    which is only know to the owner. However, an observer who
    sees multiple beacons within the same epoch can correlate
-   them, as they will have the same `Y_i`. However, fast
+   them, as they will have the same `Y_i`. However, fast key
    rotation also makes it more difficult to detect unwanted
    tracking, which relies on multiple observations of the
    same identifier over time.
@@ -441,7 +519,7 @@ spatially separated devices to reduce the per-device cost.
 
 This section provides a detailed description of the DULT Finding Protocol.
 
-## Sysstem Stages
+## System Stages
 
 The there are 5 stages that will be outlined, taking into account elements from both {{BlindMy}} and {{GMCKV21}}.  These stages are as follows:
 
@@ -451,7 +529,7 @@ In this phase, the Accessory `ACC` is paired with the Owner Device `OD`, and ver
 
 2) __Accessory in Nearby Owner Mode__
 
-In this phase, the Accessory `ACC` is within Bluetooth range of the Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT generate location reports to send to the Crownsourced Network `CN`. The Accessory SHALL behave as defined in {{DultDoc3}}.
+In this phase, the Accessory `ACC` is within Bluetooth range of the Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT generate location reports to send to the Crowdsourced Network `CN`. The Accessory SHALL behave as defined in {{DultDoc3}}. [[OPEN ISSUE: Need to make sure that walking around with an AirTag in Nearby Mode does not allow for stalking]]
 
 3) __Accessory in Separated (Lost) Mode__
 
@@ -461,7 +539,9 @@ In this phase, the Accessory `ACC` is not within Bluetooth raange fo the Owner D
 
 Finder Device `FD` receives a Bluetooth packet, and uploads a location report to the Crowdsourced Network `CN` if and only if it is confirmed to be a valid location report.
 
-*(Should this be confirmed by the FD, or the CN? or Both?)
+[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or Both?]]
+
+[[OPEN ISSUE: Should there be auth between `FD` and `ACC` as well as `FD` and `CN`]]
 
 5) __Owner Device queries the Crowdsourced Network__
 
@@ -470,7 +550,7 @@ Owner Device `OD` queries the Crowdsourced Network `CN` for the encrypted locati
 
 ## General Protocol Infrastructure Properties
 
-Relying on {{BlindMy}}, we define the following constraints:
+We define the following constraints, adapted from {{BlindMy}} Section 4.2.
 
 - There exists an agreed upon elliptic curve group with a generator,
 a secure Message Authentication Algorithm, and a hashing
@@ -482,8 +562,11 @@ function *H*.
 - `CN` has a private symmetric encryption key K<sub>SERIAL</sub>.
 
 - `CN` maintains a database of registered serial values D<sub>SERIAL</sub>
+[[OPEN ISSUE: Does this create a privacy concern? ]]
 
--  Each Accessory `ACC`<sub>i</sub> contains a unique serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>)
+-  Each Accessory `ACC`<sub>i</sub> is provisioned with a unique
+   serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>),
+   where the tag is a MAC computed over D<sub>SERIAL</sub>.
 
 - All parties have a synchronized clock and the ability to represent the current day (or another arbitrary timestamp) as an integer
 
@@ -491,106 +574,114 @@ function *H*.
 
 ## Partial Blind Signature Scheme
 
-In order to verify the parties involved in the protocol, we rely on a partial blind signature scheme as defined in {{BlindMy}} and {{Okamoto}}:
+[[OPEN ISSUE: Which blind signature scheme to use.]]
+In order to verify the parties involved in the protocol, we rely on a
+partially blind signature scheme. {{?RFC9474}} describes a blind signature
+scheme as follows:
 
-| Partial Blind Signature Scheme   |
-|:------------------------------:|
-| * There exists a probabilistic polynomial time (PPT) algorithm called *KeyGen* that takes a security parameter as input and outputs a key pair containing a secret key and public key (`s`<sub>k</sub>,`p`<sub>k</sub>).         |
-| * There exists two interactive PPT algorithms called *Signer* and *User* that compute a signature `σ` of a message `m` and plaintext auxiliary information `info`. The *Signer* begins with (`s`<sub>k</sub>,`p`<sub>k</sub>,`info`), and the *User* starts with (`p`<sub>k</sub>,`info`, `m`). After interacting, the *User* outputs (`m`, `σ` ) if the protocol succeeds and    `⊥` if it fails.            |
-| * There exists a PPT algorithm called *Verify* that receives  (`p`<sub>k</sub>,`info`, `m`,`σ` ) and outputs `accept` when the signature is valid, and `reject` if it is not.           |
+   The RSA Blind Signature Protocol is a two-party protocol between a
+   client and server where they interact to compute sig = Sign(sk,
+   input_msg), where input_msg = Prepare(msg) is a prepared version of
+   the private message msg provided by the client, and sk is the private
+   signing key provided by the server.  See Section 6.2 for details on
+   how sk is generated and used in this protocol.  Upon completion of
+   this protocol, the server learns nothing, whereas the client learns
+   sig.  In particular, this means the server learns nothing of msg or
+   input_msg and the client learns nothing of sk.
 
-Text adapted from Section 2.5 of {{BlindMy}}.
+The Finding Protocol uses a partially blind signature scheme in which
+the signature also covers an additional `info` value which is not
+kept secret from the signing server.
+
 
 ## Initial Pairing / Accessory Setup {#setup}
 
-During the pairing process, the Accessory `ACC` pairs with the Owner Device `OD` over Bluetooth. In this process, the `ACC` and `OD` must generate cryptographically secure keys that will allow for the `OD` to decrypt the `ACC` location reports.
+During the pairing process, the Accessory `ACC` pairs with the Owner
+Device `OD` over Bluetooth. In this process, the `ACC` and `OD` must
+generate cryptographically secure keys that will allow for the `OD` to
+decrypt the `ACC` location reports.
 
 ### Authenticity Verification
 
-Upon the initial pairing of the the `ACC` and `OD`, before the key generation process, the `OD` must facilitate communication with the `CN` to verify the authenticity of the `ACC`. In {{GMCKV21}}, it is recommended that the `ACC` has a private key material fused into the chip at manufacture time.
+Upon the initial pairing of the the `ACC` and `OD`, before the key
+generation process, the `OD` must facilitate communication with the
+`CN` to verify the authenticity of the `ACC`.
 
-In {{BlindMy}}, the principal of *Serial Unforgeability* is introduced, which recommends that the serial numbers are assigned as an unforgeable MAC that is computed with a secret key only known to the server.
+The precise details of this communication are implementation-dependent,
+but at the end of this process the `CN` must be able to verify that:
 
+1. The `ACC` is a legitimate (i.e., authorized) device.
+1. The `ACC` has not already been registered.
 
-(1)`OD` extracts the values (`Serial`<sub>i</sub>, `T`<sub>i</sub>) from `ACC`, where
-
-`T`<sub>i</sub> = MAC<sub>KSERIAL</sub>(`Serial`<sub>i</sub>)
-
-(2) `OD` transmits these values to `CN`.
-
-(3) `CN` independently verifies `T`<sub>i</sub>
-
-(4) To prevent re-enrollment of a tag, `CN` also checks `Serial`<sub>i</sub> ∉ `D`<sub>SERIAL</sub>
-
-(5) If (3) or (4) fails, `CN` aborts. Otherwise, `CN` adds `Serial`<sub>i</sub> to `D`<sub>SERIAL</sub>
-
-(6) `CN` sends public parameters for generating *N* partial blind signatures to `OD`. These parameters are defined in the next section.
+For instance, each `ACC` might be provisioned with a unique serial
+number which is digitally signed by the manufacturer, thus allowing
+the `CN` to verify legitimacy. The `CN` could use a database of
+registered serial numbers to prevent multiple registrations.
+Once registration is complete, there must be some mechanism for
+the `OD` to maintain continuity of authentication; this too is
+implementation specific.
 
 
 ### Key Generation and Signing with Partial Blind Signatures
 
-In order for `OD` to have *N* keys signed by partial blind signatures, the scheme described in {{BlindMy}} must be implemented.
+The `ACC` must periodically be provisioned with new temporal
+keys which FDs can then use to encrypt reports. Each temporal key
+is associated with a given timestamp value,
 
-For convenience, it is summarized below:
+Once the `ACC` has been authorized, the `ACC` (or `OD` on its behalf)
+needs to generate its temporal encryption keys `Y_i`. It then generates
+a signing request for the blinded version of each key.
 
-(1) `CN` generates the public parameters `u, d, s, a, b` where `u, d, s` represent the Signer State and `a, b` represents the Signature Parameters.
+contains two values:
 
-They are generated by the following code given in {{BlindMy}} *pbs_dh.py*:
+blindedKey
+: An opaque string representing the key to be signed, computed as below.
 
-~~~
-def raw_signer_gen_params(hashfunc, privkey, info):
-    u = randbelow(q)
-    d = randbelow(q)
-    s = randbelow(q)
+timestamp
+: The time value for the first time when the key will be used in
+  seconds since the UNIX epoch
 
-    z = hashToPoint(info, hashfunc)
-    a = pow(g, u, p)
-    b = (pow(g,s,p) * pow(z,d,p)) % p
+~~~~
+blindedKey = Blind(pk, Y_i, info)
+~~~~
 
-    return (u, d, s, a, b)
-~~~
+With the following inputs:
 
-(2) After receiving the public parameters required from `CN`, `OD` generates N elliptic-curve keypairs, as shown in the code from {{BlindMy}} *client.py*:
+pk
+: The public key for `CN`
 
-~~~
-def gen_keys(privateseed: str, numkeys: int) -> List[str]:
-    print(f"Generating {numkeys} keys")
-    pubkeys = []
-    for i in tqdm(range(numkeys)):
-        pkey = hashToInt(privateseed + str(i), P224, sha256)
-        pubkey = pkey * P224.G
-        pubkeyx = '{:056x}'.format(pubkey.x)
-        pubkeys.append(pubkeyx)
-    return pubkeys
-~~~
+Y_i
+: The temporal key to be signed
 
-(3) `OD` generates signing requests for each public key in *N*,using params *a* and *b*, the hashing function *H*, and the auxiliary info for each signing request set as the integer representation of the current day and the *N − 1* following days. These requests are then sent to `CN`. Notice that `OD` performs blinding on each public key before making the request.
-
-This is shown in the code from {{BlindMy}} *pbs_dh.py*:
-
-~~~
-    #sigparams - SignatureParams object, comes from generate_params function above
-    #msg - string or bytes object representing the message being signed
-    #info - string representing the plaintext auxiliary information to go along with the blinded signature
-    def generate_signature_request(self, sigparams, msg, info):
-        t1, t2, t3, t4, e = raw_user_blind(self.hashfunc, self.pubkey, msg, info, sigparams.a, sigparams.b)
-        return UserState(t1, t2, t3, t4), e
-~~~
-
-(4) `CN` verifies the timestamp infomation and aborts if not in a valid range.
+info
+: The timestamp value serialized as an unsigned 64-bit integer
+  in network byte order.
 
 
-(5) `CN` signs each each public key with a blind signature and sends the *N* blind signatures to `OD`.
+Prior to signing the key, the `CN` must ensure the acceptability of the timestamp.
+While the details are implementation dependent, this generally involves
+enforcing rate limits on how many keys can be signed with timestamps
+within a given window. Once the `CN` is satisfied with the submission
+it constructs a blind signature as shown below and returns it to the `OD`.
 
-(6) `OD` unblinds the signatures and stores *N* pairs of the form `(KeyPair, UnblindedSignature)` and transfers the *N* public keys to the accessory `ACC`, ordered by timestamp.
+[[OPEN ISSUE: Is it safe for `ACC` to hold all of the precomputed keys? Or does this create a privacy issue? ]]
 
+~~~~
+    BlindSign(sk, blindedKey, info)
+~~~~
 
-## Accessory Behavior
+With the following inputs
 
-As part of the setup phase (described in {{DultDoc3}}) the Accessory `ACC` and
-Owner Device `OD` are paired, establishing a shared key `S`<sub>K</sub>
-which is known to both the accessory and the owning device.
-The rest of the protocol proceeds as follows:
+sk
+: The secret key for `CN`
+
+blindedKey
+: The raw bytes of the blinded key provided by `CN`
+
+Upon receiving the signed blinded key, the `OD` unblinds the signature
+and stores it. If the `OD` generated `Y_i`, it must also transfer it
+to the `ACC`. Note that `ACC` does not need a copy of the signature.
+
 
 ### Accessory in Nearby Owner Mode
 
@@ -600,13 +691,9 @@ After pairing, when the Accessory `ACC` is in Bluetooth range of `OD`, it will f
 
 After pairing, when the Accessory `ACC` no longer in the Bluetooth range of `OD`, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in {{DultDoc3}}:
 
-`ACC` periodically sends out an Advertisement which contains
-an ephemeral public key `Y`<sub>i</sub> where `i` is the epoch the key is valid
-for.  As defined by our protocol, this epoch is a 24 hour period. `Y`<sub>i</sub> and its corresponding private key
-`X`<sub>i</sub> are generated in a deterministic fashion from `S`<sub>K</sub> and the epoch
-`i` (conceptually as `X`<sub>i</sub> = `PRF`(`S`<sub>K</sub>, `i`)).
-
-The full payload format of the Advertisement is defined in {{DultDoc3}}.
+`ACC` periodically sends out an Advertisement which contains the then
+current ephemeral public key `Y_i`. The full payload format of the
+Advertisement is defined in {{DultDoc3}}.
 
 
 ## Finder Device creates a Location Report
@@ -615,48 +702,96 @@ The Finder Device `FD` receives the advertisement via Bluetooth. `FD` should hav
 
 In order to report an accessory's location at time `i`, `FD` extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in {{Heinrich}}.
 
-`FD` performs ECDH with the public key  `Y`<sub>i</sub> and derives a shared symmetric key with ECIES.
+`FD` performs ECDH with the public key  `Y`<sub>i</sub> and uses it to encrypt the
+location data using HPKE Seal {{!RFC9180}}. It sends the result to the CN along with
+the hash of the current public key and the current time.
+[[OPEN ISSUE: Should we work in terms of hashes or the public
+keys. What we send has to be what's looked up.]]. `CN` stores the resulting
+values indexed under the hash of the public key.
 
-It then encrypts the location data using the symmetric key, and creates a payload as described in {{Heinrich}} and {{WhoTracks}}. It transmits a payload to `CN` with the encrypted packet
-`( E(Y`<sub>i</sub>,`location), Y`<sub>i</sub>`)`.
 
-`FD` uploads the encrypted payload, the public ephemeral key, a timestamp, and the hash of the public key to `CN`, who records it in a key-value store with the key as the hash of the `ACC` public key.
 
+
+## Owner Device queries the Crowdsourced Network
+
+`OD`s can retrieve the location of a paired `ACC` by querying the `CN`.
+
+In order to query for a given time period `i` it presents:
+
+* The public key `Y_i` [or hash of the public key]
+* The `CN`'s signature over `Y_i` as well as the associated
+  `info` value.
+
+The CN then proceeds as follows:
+
+1. Verify the signature over the key [hash]
+1. Verify that the timestamp in the `info` value is within an
+   acceptable period of time (e.g., one week) from the current time
+   [[OPEN ISSUE: Why do we need this step?]]
+1. Retrieve all reports matching the provided `Y_i`
+1. Remove all reports which have timestamps that are not within the acceptable
+   time use window for the key, as indicated by the key's timestamp.
+1. Return the remaining reports to `OD`.
+
+Finally, `OD` uses HPKE Open to decrypt the resulting reports,
+thus recovering the location data for report.
+
+
+<!--
 \* Some ideas include
 
 - `FD` can request a signature itself of the key - but would it be the same?
 - `ACC` can send the public key and the signature to `FD` so `FD` can verify the signature
 - `CN` has the option of discarding the packet if the hash of the public key is unknown, since the server has already signed all of the keys in the past - but is it reasonable to save/store these?
-
-
-## Owner Device queries the Crowdsourced Network
-
-Following the sequence described in {{BlindMy}}, valid `OD`s can retrieve the location of a paired `ACC`.  In order to query the location of `ACC`, the `OD` can sends a request to the `CN`. The `CN` must verify that each location requested has been blind-signed and is within a valid date range This prevents adversaries from storing many old blind-signed keys and rotating them quickly in order to avoid detection.
-
-This is achieved in the following manner:
-
-(1) In order to locate an accessory at time `i`, the `OD` uses `SK` to
-compute the hash of the desired public key `Y`<sub>i</sub>. The owner `OD` sends the unblinded, signed public key hashes to `CN` corresponding to the date range they are interested in retrieving, along with the corresponding info fields for each one.
-
-
-(2) `CN` confirms the auxiliary information on each signature is reasonable (e.g. falls within the last 7 days) and that the signature of each hash verifies correctly.
-
-
-(3) `CN` retrieves any report matching the hashes supplied `Y`<sub>i</sub> and returns them to the `OD`, including the public key hash, the ephemeral public key, and encrypted payload, minus any reports where the timestamp does not match the correct time period from the info field (this would indicate that they key was being used outside of its intended validity period).
-
-(4) For each report, `OD` finds the public key for the report by its hash, and uses the corresponding private key alongside the ephemeral public key included in the report to decrypt the encrypted payload and recover the timestamp, confidence, and location data associated with the report.
-
-
+-->
 
 
 # Security Considerations
 
-TODO Security - as described in {{DultDoc4}}?
+TODO Security - as described in {{DultDoc4}}?.
+This section still mostly needs to be written.
+
+### Effectiveness of Rate Limiting via Blind Signatures
+
+The blind signature mechanism described here (adapted from
+{{BlindMy}}) helps to limit the damage of noncompliant devices.
+
+Because the `CN` will only generate signatures when the request is
+associated with a valid device, an attacker cannot obtain a key
+directly for a noncompliant device. However, this does not necessarily
+mean that the attacker cannot provision noncompliant
+devices. Specifically, if the `OD` sees the public keys (it need not
+know the private keys, as described below) when they are sent to the
+`CN` for signature, then it can provision them to a noncompliant
+device.
+
+Even an attacker who can provision invalid devices can only obtain one
+key per time window per valid device. Because key use windows overlap,
+it is possible to rotate keys more frequently than the window, but in
+order to rotate keys significantly more frequently than this, the
+attacker must purchase multiple devices. However, they may be able
+to provision the keys from multiple valid devices onto the same device,
+thus achieving a rotation rate increase at linear cost.
+
+Note that enforcement of this rate limit happens only on the `CN`: the
+`FD` does not check. An attacker can generate advertisements with
+unsigned keys -- and thus at any rotation rate it chooses -- and the
+`FD` will duly send valid reports encrypted under those keys. The `CN`
+will store them but because the attacker will not be able to produce
+valid signatures, they will not be able to retrieve those reports.
+
+As noted above, the `ACC` does not need to prove that it knows the
+corresponding private keys for a given public key. The `ACC`
+simply broadcasts the public keys; it is the `OD` which needs to
+know the private keys in order to decrypt the reports.
 
 
 # Privacy Considerations
 
 TODO Privacy - as described in {{DultDoc4}}?
+
+
+
 
 
 # IANA Considerations
