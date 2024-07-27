@@ -493,7 +493,7 @@ can change. This rate limiting works as follows:
 
 1. During the setup/pairing phase, the accessory and owning
    device interact with the central service, which
-   signs each temporal key using a blind signature scheme.
+   signs each temporal key using a blind signature scheme
    The owning device stores the signatures for each key `Y_i`.
 
 1. When it wishes to retrieve the location for a given accessory
@@ -512,7 +512,6 @@ but an attacker who purchases N devices can then use N times
 that many keys per window, potentially coordinating usage across
 spatially separated devices to reduce the per-device cost.
 [[OPEN ISSUE: Can we do better than this?]]
-
 
 
 # Protocol Definition
@@ -551,6 +550,7 @@ Owner Device `OD` queries the Crowdsourced Network `CN` for the encrypted locati
 ## Partial Blind Signature Scheme
 
 [[OPEN ISSUE: Which blind signature scheme to use.]]
+
 In order to verify the parties involved in the protocol, we rely on a
 partially blind signature scheme. {{?RFC9474}} describes a blind signature
 scheme as follows:
@@ -684,7 +684,6 @@ the hash of the current public key and the current time.
 [[OPEN ISSUE: Should we work in terms of hashes or the public
 keys. What we send has to be what's looked up.]]. `CN` stores the resulting
 values indexed under the hash of the public key.
-
 
 
 
