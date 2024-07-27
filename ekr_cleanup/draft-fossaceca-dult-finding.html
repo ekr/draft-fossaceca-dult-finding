@@ -1679,7 +1679,7 @@ one for each time window.<a href="#section-4.2.1-2.1.1" class="pilcrow">¶</a></
             <li id="section-4.2.1-2.2">
               <p id="section-4.2.1-2.2.1">During the setup/pairing phase, the accessory and owning
 device interact with the central service, which
-signs each temporal key using a blind signature scheme.
+signs each temporal key using a blind signature scheme
 The owning device stores the signatures for each key <code>Y_i</code>.<a href="#section-4.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li id="section-4.2.1-2.3">
@@ -1736,11 +1736,11 @@ spatially separated devices to reduce the per-device cost.
         <h3 id="name-partial-blind-signature-sch">
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-partial-blind-signature-sch" class="section-name selfRef">Partial Blind Signature Scheme</a>
         </h3>
-<p id="section-5.2-1">[[OPEN ISSUE: Which blind signature scheme to use.]]
-In order to verify the parties involved in the protocol, we rely on a
+<p id="section-5.2-1">[[OPEN ISSUE: Which blind signature scheme to use.]]<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">In order to verify the parties involved in the protocol, we rely on a
 partially blind signature scheme. <span>[<a href="#RFC9474" class="cite xref">RFC9474</a>]</span> describes a blind signature
-scheme as follows:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">The RSA Blind Signature Protocol is a two-party protocol between a
+scheme as follows:<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">The RSA Blind Signature Protocol is a two-party protocol between a
    client and server where they interact to compute sig = Sign(sk,
    input_msg), where input_msg = Prepare(msg) is a prepared version of
    the private message msg provided by the client, and sk is the private
@@ -1748,10 +1748,10 @@ scheme as follows:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
    how sk is generated and used in this protocol.  Upon completion of
    this protocol, the server learns nothing, whereas the client learns
    sig.  In particular, this means the server learns nothing of msg or
-   input_msg and the client learns nothing of sk.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
-<p id="section-5.2-3">The Finding Protocol uses a partially blind signature scheme in which
+   input_msg and the client learns nothing of sk.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<p id="section-5.2-4">The Finding Protocol uses a partially blind signature scheme in which
 the signature also covers an additional <code>info</code> value which is not
-kept secret from the signing server.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+kept secret from the signing server.<a href="#section-5.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="setup">
