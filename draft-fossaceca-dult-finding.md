@@ -493,7 +493,7 @@ can change. This rate limiting works as follows:
 
 1. During the setup/pairing phase, the accessory and owning
    device interact with the central service, which
-   signs each temporal key using a blind signature scheme
+   signs each temporal key using a blind signature scheme.
    The owning device stores the signatures for each key `Y_i`.
 
 1. When it wishes to retrieve the location for a given accessory
