@@ -548,30 +548,6 @@ Finder Device `FD` receives a Bluetooth packet, and uploads a location report to
 Owner Device `OD` queries the Crowdsourced Network `CN` for the encrypted location report.
 
 
-## General Protocol Infrastructure Properties
-
-We define the following constraints, adapted from {{BlindMy}} Section 4.2.
-
-- There exists an agreed upon elliptic curve group with a generator,
-a secure Message Authentication Algorithm, and a hashing
-function *H*.
-
-- `CN` knows a key pair `(K`<sub>S</sub>,`P`<sub>S</sub>`)`, where the public key
-`P`<sub>S</sub> is known to all participants.
-
-- `CN` has a private symmetric encryption key K<sub>SERIAL</sub>.
-
-- `CN` maintains a database of registered serial values D<sub>SERIAL</sub>
-[[OPEN ISSUE: Does this create a privacy concern? ]]
-
--  Each Accessory `ACC`<sub>i</sub> is provisioned with a unique
-   serial number and tag (`Serial`<sub>i</sub>, `T`<sub>i</sub>),
-   where the tag is a MAC computed over D<sub>SERIAL</sub>.
-
-- All parties have a synchronized clock and the ability to represent the current day (or another arbitrary timestamp) as an integer
-
-- A parameter *N* is defined by the protocol that represents the number of encryption keys produced during the pairing algorithm.
-
 ## Partial Blind Signature Scheme
 
 [[OPEN ISSUE: Which blind signature scheme to use.]]
