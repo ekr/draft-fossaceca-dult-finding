@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-25T00:22:12.660885+00:00",
+  "timestamp": "2024-07-28T00:24:43.615930+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -271,6 +271,32 @@
       "mergeCommit": {
         "oid": "5208318f727d587fd3296850c015860fb0c4680c"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOLlgmts52p0jt",
+      "title": "Remove the protocol infrastructure properties. These is detail from",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/9",
+      "state": "OPEN",
+      "author": "ekr",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "BlindMy that isn't relevant in the protocol sketch we supply here. Specifically:\r\n\r\n- We just talk about blind signatures generically so we don't need to discuss the group\r\n- We assume that there is some mechanism for `CN` to authenticate the tag, but maybe not the specific one in BlindMy",
+      "createdAt": "2024-07-27T23:20:10Z",
+      "updatedAt": "2024-07-27T23:21:23Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "5208318f727d587fd3296850c015860fb0c4680c",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "ekr_cleanup",
+      "headRefOid": "775608dcb760e90721e9018c3a4be90917f04d57",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
