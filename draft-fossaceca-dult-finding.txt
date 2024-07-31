@@ -5,8 +5,8 @@
 Detecting Unwanted Location Trackers                        C. Fossaceca
 Internet-Draft                                                 Microsoft
 Intended status: Informational                               E. Rescorla
-Expires: 24 January 2025                         Windy Hill Systems, LLC
-                                                            23 July 2024
+Expires: 1 February 2025                         Windy Hill Systems, LLC
+                                                            31 July 2024
 
 
                          Finding Tracking Tags
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 January 2025.
+   This Internet-Draft will expire on 1 February 2025.
 
 Copyright Notice
 
@@ -92,16 +92,15 @@ Table of Contents
        4.2.1.  Rate Limiting and Attestation
    5.  Protocol Definition
      5.1.  System Stages
-     5.2.  General Protocol Infrastructure Properties
-     5.3.  Partial Blind Signature Scheme
-     5.4.  Initial Pairing / Accessory Setup
-       5.4.1.  Authenticity Verification
-       5.4.2.  Key Generation and Signing with Partial Blind
+     5.2.  Partial Blind Signature Scheme
+     5.3.  Initial Pairing / Accessory Setup
+       5.3.1.  Authenticity Verification
+       5.3.2.  Key Generation and Signing with Partial Blind
                Signatures
-       5.4.3.  Accessory in Nearby Owner Mode
-       5.4.4.  Accessory in Separated (Lost) Mode
-     5.5.  Finder Device creates a Location Report
-     5.6.  Owner Device queries the Crowdsourced Network
+       5.3.3.  Accessory in Nearby Owner Mode
+       5.3.4.  Accessory in Separated (Lost) Mode
+     5.4.  Finder Device creates a Location Report
+     5.5.  Owner Device queries the Crowdsourced Network
    6.  Security Considerations
      6.1.  Effectiveness of Rate Limiting via Blind Signatures
    7.  Privacy Considerations
@@ -446,7 +445,7 @@ o          o                  │ │              │ │                 ~- . 
 
                      Figure 1: Protocol Overview
 
-   As part of the setup phase (Section 5.4) the accessory and owning
+   As part of the setup phase (Section 5.3) the accessory and owning
    device are paired, establishing a shared key SK which is known to
    both the accessory and the owning device.  The rest of the protocol
    proceeds as follows.
@@ -609,39 +608,13 @@ o          o                  │ │              │ │                 ~- . 
    Owner Device OD queries the Crowdsourced Network CN for the encrypted
    location report.
 
-5.2.  General Protocol Infrastructure Properties
+5.2.  Partial Blind Signature Scheme
 
-   We define the following constraints, adapted from [BlindMy]
-   Section 4.2.
+   [[OPEN ISSUE: Which blind signature scheme to use.]]
 
-   *  There exists an agreed upon elliptic curve group with a generator,
-      a secure Message Authentication Algorithm, and a hashing function
-      _H_.
-
-   *  CN knows a key pair (K_S,P_S), where the public key P_S is known
-      to all participants.
-
-   *  CN has a private symmetric encryption key K_SERIAL.
-
-   *  CN maintains a database of registered serial values D_SERIAL
-      [[OPEN ISSUE: Does this create a privacy concern? ]]
-
-   *  Each Accessory ACC_i is provisioned with a unique serial number
-      and tag (Serial_i, T_i), where the tag is a MAC computed over
-      D_SERIAL.
-
-   *  All parties have a synchronized clock and the ability to represent
-      the current day (or another arbitrary timestamp) as an integer
-
-   *  A parameter _N_ is defined by the protocol that represents the
-      number of encryption keys produced during the pairing algorithm.
-
-5.3.  Partial Blind Signature Scheme
-
-   [[OPEN ISSUE: Which blind signature scheme to use.]] In order to
-   verify the parties involved in the protocol, we rely on a partially
-   blind signature scheme.  [RFC9474] describes a blind signature scheme
-   as follows:
+   In order to verify the parties involved in the protocol, we rely on a
+   partially blind signature scheme.  [RFC9474] describes a blind
+   signature scheme as follows:
 
    The RSA Blind Signature Protocol is a two-party protocol between a
    client and server where they interact to compute sig = Sign(sk,
@@ -657,14 +630,14 @@ o          o                  │ │              │ │                 ~- . 
    the signature also covers an additional info value which is not kept
    secret from the signing server.
 
-5.4.  Initial Pairing / Accessory Setup
+5.3.  Initial Pairing / Accessory Setup
 
    During the pairing process, the Accessory ACC pairs with the Owner
    Device OD over Bluetooth.  In this process, the ACC and OD must
    generate cryptographically secure keys that will allow for the OD to
    decrypt the ACC location reports.
 
-5.4.1.  Authenticity Verification
+5.3.1.  Authenticity Verification
 
    Upon the initial pairing of the the ACC and OD, before the key
    generation process, the OD must facilitate communication with the CN
@@ -686,7 +659,7 @@ o          o                  │ │              │ │                 ~- . 
    maintain continuity of authentication; this too is implementation
    specific.
 
-5.4.2.  Key Generation and Signing with Partial Blind Signatures
+5.3.2.  Key Generation and Signing with Partial Blind Signatures
 
    The ACC must periodically be provisioned with new temporal keys which
    FDs can then use to encrypt reports.  Each temporal key is associated
@@ -737,12 +710,12 @@ o          o                  │ │              │ │                 ~- . 
    and stores it.  If the OD generated Y_i, it must also transfer it to
    the ACC.  Note that ACC does not need a copy of the signature.
 
-5.4.3.  Accessory in Nearby Owner Mode
+5.3.3.  Accessory in Nearby Owner Mode
 
    After pairing, when the Accessory ACC is in Bluetooth range of OD, it
    will follow the protocol as decribed in [DultDoc3].
 
-5.4.4.  Accessory in Separated (Lost) Mode
+5.3.4.  Accessory in Separated (Lost) Mode
 
    After pairing, when the Accessory ACC no longer in the Bluetooth
    range of OD, it will follow the protocol as decribed below:, which
@@ -752,7 +725,7 @@ o          o                  │ │              │ │                 ~- . 
    current ephemeral public key Y_i.  The full payload format of the
    Advertisement is defined in [DultDoc3].
 
-5.5.  Finder Device creates a Location Report
+5.4.  Finder Device creates a Location Report
 
    The Finder Device FD receives the advertisement via Bluetooth.  FD
    should have a mechanism by which to authenticate that this is a valid
@@ -770,7 +743,7 @@ o          o                  │ │              │ │                 ~- . 
    keys.  What we send has to be what's looked up.]].  CN stores the
    resulting values indexed under the hash of the public key.
 
-5.6.  Owner Device queries the Crowdsourced Network
+5.5.  Owner Device queries the Crowdsourced Network
 
    ODs can retrieve the location of a paired ACC by querying the CN.
 
