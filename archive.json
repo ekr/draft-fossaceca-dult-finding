@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-30T00:22:07.817669+00:00",
+  "timestamp": "2024-08-01T00:24:44.217925+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -279,26 +279,42 @@
       "id": "PR_kwDOLlgmts52p0jt",
       "title": "Remove the protocol infrastructure properties. These is detail from",
       "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/9",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ekr",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "BlindMy that isn't relevant in the protocol sketch we supply here. Specifically:\r\n\r\n- We just talk about blind signatures generically so we don't need to discuss the group\r\n- We assume that there is some mechanism for `CN` to authenticate the tag, but maybe not the specific one in BlindMy",
       "createdAt": "2024-07-27T23:20:10Z",
-      "updatedAt": "2024-07-27T23:21:23Z",
+      "updatedAt": "2024-07-31T20:03:50Z",
       "baseRepository": "ekr/draft-fossaceca-dult-finding",
       "baseRefName": "main",
       "baseRefOid": "5208318f727d587fd3296850c015860fb0c4680c",
       "headRepository": "ekr/draft-fossaceca-dult-finding",
       "headRefName": "ekr_cleanup",
       "headRefOid": "775608dcb760e90721e9018c3a4be90917f04d57",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-07-31T20:03:50Z",
+      "mergedAt": "2024-07-31T20:03:50Z",
+      "mergedBy": "cfossace",
+      "mergeCommit": {
+        "oid": "72eb3bfa4e487f9b887a25ba9d57380550349d73"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOLlgmts6DyZwu",
+          "commit": {
+            "abbreviatedOid": "775608d"
+          },
+          "author": "cfossace",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "thanks for looking at this!",
+          "createdAt": "2024-07-31T20:03:44Z",
+          "updatedAt": "2024-07-31T20:03:44Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
