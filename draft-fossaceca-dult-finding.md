@@ -187,7 +187,8 @@ At a high level, this works as follows:
   observe those payloads and if the payload is in a separated
   mode, reports its location to some central service ("Crowdsourced Network").
 
-- The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.
+- The owner ("Owner Device") queries the central service
+  ("Crowdsourced Network") for the location of their accessory.
 
 A naive implementation of this design exposes users to considerable
 privacy risk. In particular:
@@ -218,11 +219,14 @@ anything about the location of a given accessory.
 - It is not possible for unverified accessories to use the crowdsourced network protocol.
 
 This document defines a cryptographic reporting and finding protocol
-which is intended to minimize these privacy risks. It is intended
-to work in concert with the requirements defined in
+which is intended to minimize these privacy risks. It is intended to
+work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
-detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in {{BlindMy}} and {{GMCKV21}} and closely follows
-the design of {{BlindMy}}.
+detection of unwanted tracking tags. This protocol design is based on
+existing academic research surrounding the security and privacy of
+bluetooth location tracking accessories on the market today, as
+described in {{BlindMy}} and {{GMCKV21}} and closely follows the
+design of {{BlindMy}}.
 
 
 # Motivations
@@ -230,61 +234,119 @@ the design of {{BlindMy}}.
 
 ## Stalking Prevention
 
-This work has been inspired by the negative security and privacy implications that were introduced by lightweight location tracking tags, and defined in part by {{!I-D.detecting-unwanted-location-trackers}}. The full threat model is described in detail in {{DultDoc4}}, however, a significant element of the threat model lies in part with the security of the Crowdsourced Network, which will be discussed in detail here.
+This work has been inspired by the negative security and privacy
+implications that were introduced by lightweight location tracking
+tags, and defined in part by
+{{!I-D.detecting-unwanted-location-trackers}}. The full threat model
+is described in detail in {{DultDoc4}}, however, a significant element
+of the threat model lies in part with the security of the Crowdsourced
+Network, which will be discussed in detail here.
 
-In addition to its designed uses, the Crowdsourced Network also provided stalkers with a means to anonymously upload and download location reports from BLE trackers. Thus, this document outlines the requirements and responsibilities of the Crowdsourced Network to verify the authenticity of the participants, while also preserving user privacy.
+In addition to its designed uses, the Crowdsourced Network also
+provided stalkers with a means to anonymously upload and download
+location reports from BLE trackers. Thus, this document outlines the
+requirements and responsibilities of the Crowdsourced Network to
+verify the authenticity of the participants, while also preserving
+user privacy.
 
-- First, the Crowdsourced Network should to ensure that only authentic Finding Devices are sending reports to the Crowdsourced Network, and this should occur via an authenticated and encrypted channel. This will help prevent malicious actors from interfering with location reporting services.
+- First, the Crowdsourced Network should to ensure that only authentic
+  Finding Devices are sending reports to the Crowdsourced Network, and
+  this should occur via an authenticated and encrypted channel. This
+  will help prevent malicious actors from interfering with location
+  reporting services.
 
-- Second, the Crowdsourced Network should ensure that only authorized Owner Devices are able to download location reports, and this should occur via an authenticated and encrypted channel. This will prevent malicious actors from unauthorized access of location data.
+- Second, the Crowdsourced Network should ensure that only authorized
+  Owner Devices are able to download location reports, and this should
+  occur via an authenticated and encrypted channel. This will prevent
+  malicious actors from unauthorized access of location data.
 
-- Third, the Crowdsourced Network must follow basic security principles, such as storing location reports in an encrypted manner
+- Third, the Crowdsourced Network must follow basic security
+  principles, such as storing location reports in an encrypted manner
 
   *(The benefits of this requirement are self explanatory.)*
 
-- Fourth, the Crowdsourced Network must validate that the accessory registered to an owner is valid.  This wil prevent malicious actors from leveraging counterfeit accessories.
+- Fourth, the Crowdsourced Network must validate that the accessory
+  registered to an owner is valid.  This wil prevent malicious actors
+  from leveraging counterfeit accessories.
 
-- Fifth, users should should be able to opt-out of their devices participating in the Crowdsourced Network.
+- Fifth, users should should be able to opt-out of their devices
+  participating in the Crowdsourced Network.
 
 ## Existing Protocols
 
-There are a variety of different products on the market today that leverage a Crowdsourced Network for location tracking. Currently, each manufacturer has designed its own implementation and product.
+There are a variety of different products on the market today that
+leverage a Crowdsourced Network for location tracking. Currently, each
+manufacturer has designed its own implementation and product.
 
 These include:
 
 ### Apple and the AirTag, as described in {{WhoTracks}} and {{Heinrich}}
 
-AirTags leverage rotating P224 public keys that are sent out as advertisements from the AirTag accessories (`ACC`) to nearby "Finder Devices" (`FD`s) on the Crowdsourced Network (`CN`). This public key allows the Finder Device to encrypt its own location information and send it to the `CN`, and the owner device is able to independently generate te correct decryption keys and request the encrypted reports from the `CN`.
+AirTags leverage rotating P224 public keys that are sent out as
+advertisements from the AirTag accessories (`ACC`) to nearby "Finder
+Devices" (`FD`s) on the Crowdsourced Network (`CN`). This public key
+allows the Finder Device to encrypt its own location information and
+send it to the `CN`, and the owner device is able to independently
+generate te correct decryption keys and request the encrypted reports
+from the `CN`.
 
 The issues found with this implementation are the following:
 
-* There is no authentication that occurs between the `ACC` and the `FD` on the network, so counterfeit `ACC`s are able to leverage `FD`s to upload location reports to Apple's on their behalf `CN` for any `ACC` mimicking the protocol. There should be authentication that prevents a rogue or non-conforming/counterfeit `ACC` from causing an `FD` to generate a location report.
+* There is no authentication that occurs between the `ACC` and the
+  `FD` on the network, so counterfeit `ACC`s are able to leverage
+  `FD`s to upload location reports to Apple's on their behalf `CN` for
+  any `ACC` mimicking the protocol. There should be authentication
+  that prevents a rogue or non-conforming/counterfeit `ACC` from
+  causing an `FD` to generate a location report.
 
-* There is no authentication that occurs between `FD` and `CN`, further verifying the validity that the report being uploaded is from an authentic `FD`, besides the fact that it is coming from a TLS protected, certificate pinned connection.
+* There is no authentication that occurs between `FD` and `CN`,
+  further verifying the validity that the report being uploaded is
+  from an authentic `FD`, besides the fact that it is coming from a
+  TLS protected, certificate pinned connection.
 
-* Anyone can download an encrypted report from Apple's `CN`, as shown in {{Heinrich}}
+* Anyone can download an encrypted report from Apple's `CN`, as shown
+  in {{Heinrich}}
 
 ### Samsung and the SmartTag, as described in {{Samsung}}
 
-Each Samsung Smart Tags can advertise up to 51 different "private ids" that are tied to each specific `ACC` when they are outside of bluetooth range of the owner device. `FD`s are referred to as "online devices" or "helper devices", and these devices will send location reports to Samsung's `CN`, where there is an option to encrypt the location data.
+Each Samsung Smart Tags can advertise up to 51 different "private ids"
+that are tied to each specific `ACC` when they are outside of
+bluetooth range of the owner device. `FD`s are referred to as "online
+devices" or "helper devices", and these devices will send location
+reports to Samsung's `CN`, where there is an option to encrypt the
+location data.
 
-The issues found with this implementation, in addition to the issues described above are the following:
+The issues found with this implementation, in addition to the issues
+described above are the following:
 
-* The privacy ids are easily enumerable, meaning that a stalker could permanently track a Smart Tag `ACC`.
+* The privacy ids are easily enumerable, meaning that a stalker could
+  permanently track a Smart Tag `ACC`.
 
-* The `CN` is easily susceptible to replay attacks from inauthentic `FD`s
+* The `CN` is easily susceptible to replay attacks from inauthentic
+  `FD`s
 
-* It is possible for an `ACC` to be impersonated and pair with the `OD`.
+* It is possible for an `ACC` to be impersonated and pair with the
+  `OD`.
 
-* There is sensitive, unique data that can be leaked by the GATT service used by an `FD` on an `ACC`
+* There is sensitive, unique data that can be leaked by the GATT
+  service used by an `FD` on an `ACC`
 
-* The `CN` (and therefore, Samsung) is able to trivially track `ACC` due to the sensitive information stored on the server (private device ID and location information)
+* The `CN` (and therefore, Samsung) is able to trivially track `ACC`
+  due to the sensitive information stored on the server (private
+  device ID and location information)
 
 ### Tile, CUBE, Chipolo, Pebblebee and TrackR as described in {{GMCKV21}}
 
-These `CN`s are somewhat similar to each other because they all leverage apps to create their `CN`, rather than being built into the device operating system, as with Apple and Samsung. Because of this, it is a significant drawback for their `CN` network as participation of `FD`s is severely limited. However, there are certain security problems with this network that are important to discuss.
+These `CN`s are somewhat similar to each other because they all
+leverage apps to create their `CN`, rather than being built into the
+device operating system, as with Apple and Samsung. Because of this,
+it is a significant drawback for their `CN` network as participation
+of `FD`s is severely limited. However, there are certain security
+problems with this network that are important to discuss.
 
-Specifically, the authors identified various "security properties" that they believe to be an ideal `CN` benchmark, and defined those eight properties as follows:
+Specifically, the authors identified various "security properties"
+that they believe to be an ideal `CN` benchmark, and defined those
+eight properties as follows:
 
 _(Definitions from {{GMCKV21}})_
 
@@ -298,17 +360,28 @@ _(Definitions from {{GMCKV21}})_
 * _It must be impossible to spoof the `CN`_
 
 
-Their research then evaluated these existing `CN`s based on the benchmark they designed. The issues discovered were:
+Their research then evaluated these existing `CN`s based on the
+benchmark they designed. The issues discovered were:
 
-* The TrackR, CUBE, Chipolo, and Pebblebee all allow for an `OD` to register an `ACC` with the `CN` without requiring any physical access to the `ACC` because the pairing/ registration process is too simplistic and only relies on the MAC address (or another static ID) of the device, which allows anyone to register as the owner of any arbitrary `ACC`.
+* The TrackR, CUBE, Chipolo, and Pebblebee all allow for an `OD` to
+  register an `ACC` with the `CN` without requiring any physical
+  access to the `ACC` because the pairing/ registration process is too
+  simplistic and only relies on the MAC address (or another static ID)
+  of the device, which allows anyone to register as the owner of any
+  arbitrary `ACC`.
 
-* All of the of the `CN`s (except for Tile) simply track `ACC`s with static identifiers of the device so like the Samsung network, the `CN`s can track arbitrary `ACC` locations
+* All of the of the `CN`s (except for Tile) simply track `ACC`s with
+  static identifiers of the device so like the Samsung network, the
+  `CN`s can track arbitrary `ACC` locations
 
-* Most of the `CN`s blindly trust received location reports from `FD`s without verifying physical proximity to the `ACC`.
+* Most of the `CN`s blindly trust received location reports from `FD`s
+  without verifying physical proximity to the `ACC`.
 
 ## Prior Research
 
-There is substantial research into stalking via the FindMy protocol and overall crowdsourced network protocol deficiencies have been described in multiple bodies of work, such as:
+There is substantial research into stalking via the FindMy protocol
+and overall crowdsourced network protocol deficiencies have been
+described in multiple bodies of work, such as:
 
 * {{GMCKV21}}
 
@@ -322,12 +395,28 @@ There is substantial research into stalking via the FindMy protocol and overall 
 
 and others.
 
-There are some suggested improvements, such as the security properties described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also suggested fusing a private key into the `ACC` to make it more difficult to spoof, and requiring that location updates be signed.
+There are some suggested improvements, such as the security properties
+described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also
+suggested fusing a private key into the `ACC` to make it more difficul
+t to spoof, and requiring that location updates be signed.
 
-{{Heinrich}} and {{WhoTracks}} pointed out early deficiencies in the protocol, which {{BlindMy}} set out to solve. By introducing a Blind Signature scheme, the authors sought to overcome an attacker leveraging a large amount of keys to avoid triggering the anti-tracking framework.  In this implementation, keys were predetermined for a set interval, and signed by the server, such that a specific, presigned key can only be used during a pre-determined interval. The drawback of this approach is that the authentication is left to the `OD` and the `CN`, and the `CN` does not do any authentication with the `FD`, so it still could store forged location reports. Additionally, the `FD` does not do any authentication with the `ACC`, which means that it could potentially interact with counterfeit `ACC` devices.
+{{Heinrich}} and {{WhoTracks}} pointed out early deficiencies in the
+protocol, which {{BlindMy}} set out to solve. By introducing a Blind
+Signature scheme, the authors sought to overcome an attacker
+leveraging a large amount of keys to avoid triggering the
+anti-tracking framework.  In this implementation, keys were
+predetermined for a set interval, and signed by the server, such that
+a specific, presigned key can only be used during a pre-determined
+interval. The drawback of this approach is that the authentication is
+left to the `OD` and the `CN`, and the `CN` does not do any
+authentication with the `FD`, so it still could store forged location
+reports. Additionally, the `FD` does not do any authentication with
+the `ACC`, which means that it could potentially interact with
+counterfeit `ACC` devices.
 
 
-{{Beck}} introduces the idea of Multi-Dealer Secret Sharing (MDSS) as a privacy preserving protocol that should also be considered.
+{{Beck}} introduces the idea of Multi-Dealer Secret Sharing (MDSS) as
+a privacy preserving protocol that should also be considered.
 
 
 
@@ -339,15 +428,26 @@ Section 1.2 of {{I-D.detecting-unwanted-location-trackers}} provides
 definitions of the various system components.
 
 
-Accessory (ACC): This is the device which will be tracked. It is assumed to lack direct internet access and GPS, but will possess Bluetooth Low Energy capabilities, which it uses to send advertisement messages. The accessory protocol is defined in {{DultDoc3}}.
+Accessory (ACC): This is the device which will be tracked. It is
+assumed to lack direct internet access and GPS, but will possess
+Bluetooth Low Energy capabilities, which it uses to send advertisement
+messages. The accessory protocol is defined in {{DultDoc3}}.
 
-Advertisement: This is the message that is sent over the BLE Protocol from the Accessory
+Advertisement: This is the message that is sent over the BLE Protocol
+from the Accessory
 
-Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Finder Devices.
+Crowdsourced Network (CN): This is the network that provides the
+location reporting upload and download services for Owner Devices and
+Finder Devices.
 
-Finder Device (FD): This is a device that is a non-owner device that contributes information about an accessory to the crowdsourced network.
+Finder Device (FD): This is a device that is a non-owner device that
+contributes information about an accessory to the crowdsourced
+network.
 
-Owner Device (OD): This is the device which owns the accessory, and to which it is paired. There can be multiple owner devices, however, the security of that implementation is outside of the scope of this document.
+Owner Device (OD): This is the device which owns the accessory, and to
+which it is paired. There can be multiple owner devices, however, the
+security of that implementation is outside of the scope of this
+document.
 
 # Protocol Overview
 
@@ -520,31 +620,47 @@ This section provides a detailed description of the DULT Finding Protocol.
 
 ## System Stages
 
-The there are 5 stages that will be outlined, taking into account elements from both {{BlindMy}} and {{GMCKV21}}.  These stages are as follows:
+The there are 5 stages that will be outlined, taking into account
+elements from both {{BlindMy}} and {{GMCKV21}}.  These stages are as
+follows:
 
 1) __Initial Pairing / Accessory Setup__
 
-In this phase, the Accessory `ACC` is paired with the Owner Device `OD`, and verified as authentic with the Crowdsourced Network `CN`
+In this phase, the Accessory `ACC` is paired with the Owner Device
+`OD`, and verified as authentic with the Crowdsourced Network `CN`
 
 2) __Accessory in Nearby Owner Mode__
 
-In this phase, the Accessory `ACC` is within Bluetooth range of the Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT generate location reports to send to the Crowdsourced Network `CN`. The Accessory SHALL behave as defined in {{DultDoc3}}. [[OPEN ISSUE: Need to make sure that walking around with an AirTag in Nearby Mode does not allow for stalking]]
+In this phase, the Accessory `ACC` is within Bluetooth range of the
+Owner Device `OD`. In this phase, Finder Devices `FDs` SHALL NOT
+generate location reports to send to the Crowdsourced Network
+`CN`. The Accessory SHALL behave as defined in {{DultDoc3}}. [[OPEN
+ISSUE: Need to make sure that walking around with an AirTag in Nearby
+Mode does not allow for stalking]]
 
 3) __Accessory in Separated (Lost) Mode__
 
-In this phase, the Accessory `ACC` is not within Bluetooth raange fo the Owner Device `OD`, therefore, the accessory must generate "lost" messages to be received by Finder Devices `FD`, as described in {{DultDoc3}}.
+In this phase, the Accessory `ACC` is not within Bluetooth raange fo
+the Owner Device `OD`, therefore, the accessory must generate "lost"
+messages to be received by Finder Devices `FD`, as described in
+{{DultDoc3}}.
 
 4) __Finder Device creates a location report__
 
-Finder Device `FD` receives a Bluetooth packet, and uploads a location report to the Crowdsourced Network `CN` if and only if it is confirmed to be a valid location report.
+Finder Device `FD` receives a Bluetooth packet, and uploads a location
+report to the Crowdsourced Network `CN` if and only if it is confirmed
+to be a valid location report.
 
-[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or Both?]]
+[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or
+Both?]]
 
-[[OPEN ISSUE: Should there be auth between `FD` and `ACC` as well as `FD` and `CN`]]
+[[OPEN ISSUE: Should there be auth between `FD` and `ACC` as well as
+`FD` and `CN`]]
 
 5) __Owner Device queries the Crowdsourced Network__
 
-Owner Device `OD` queries the Crowdsourced Network `CN` for the encrypted location report.
+Owner Device `OD` queries the Crowdsourced Network `CN` for the
+encrypted location report.
 
 
 ## Partial Blind Signature Scheme
@@ -661,11 +777,14 @@ to the `ACC`. Note that `ACC` does not need a copy of the signature.
 
 ### Accessory in Nearby Owner Mode
 
-After pairing, when the Accessory `ACC` is in Bluetooth range of `OD`, it will follow the protocol as decribed in {{DultDoc3}}.
+After pairing, when the Accessory `ACC` is in Bluetooth range of `OD`,
+it will follow the protocol as decribed in {{DultDoc3}}.
 
 ### Accessory in Separated (Lost) Mode
 
-After pairing, when the Accessory `ACC` no longer in the Bluetooth range of `OD`, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in {{DultDoc3}}:
+After pairing, when the Accessory `ACC` no longer in the Bluetooth
+range of `OD`, it will follow the protocol as decribed below:, which
+should correspond to the behavior outlined in {{DultDoc3}}:
 
 `ACC` periodically sends out an Advertisement which contains the then
 current ephemeral public key `Y_i`. The full payload format of the
@@ -674,16 +793,21 @@ Advertisement is defined in {{DultDoc3}}.
 
 ## Finder Device creates a Location Report
 
-The Finder Device `FD` receives the advertisement via Bluetooth. `FD` should have a mechanism by which to authenticate that this is a valid public key with `CN`. *
+The Finder Device `FD` receives the advertisement via Bluetooth. `FD`
+should have a mechanism by which to authenticate that this is a valid
+public key with `CN`. *
 
-In order to report an accessory's location at time `i`, `FD` extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in {{Heinrich}}.
+In order to report an accessory's location at time `i`, `FD` extracts
+the elliptic curve public key from the advertisement, and records it
+own location data, a timestamp, and a confidence value as described in
+{{Heinrich}}.
 
-`FD` performs ECDH with the public key  `Y`<sub>i</sub> and uses it to encrypt the
-location data using HPKE Seal {{!RFC9180}}. It sends the result to the CN along with
-the hash of the current public key and the current time.
-[[OPEN ISSUE: Should we work in terms of hashes or the public
-keys. What we send has to be what's looked up.]]. `CN` stores the resulting
-values indexed under the hash of the public key.
+`FD` performs ECDH with the public key `Y`<sub>i</sub> and uses it to
+encrypt the location data using HPKE Seal {{!RFC9180}}. It sends the
+result to the CN along with the hash of the current public key and the
+current time.  [[OPEN ISSUE: Should we work in terms of hashes or the
+public keys. What we send has to be what's looked up.]]. `CN` stores
+the resulting values indexed under the hash of the public key.
 
 
 
