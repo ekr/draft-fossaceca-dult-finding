@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-01T00:24:44.217925+00:00",
+  "timestamp": "2024-08-04T00:24:27.975477+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -315,6 +315,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOLlgmts53Vwxt",
+      "title": "Reflow long lines",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/10",
+      "state": "OPEN",
+      "author": "ekr",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "I find it a lot easier to work with short lines. This has no substantive changes.",
+      "createdAt": "2024-08-03T17:52:28Z",
+      "updatedAt": "2024-08-03T17:52:28Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "72eb3bfa4e487f9b887a25ba9d57380550349d73",
+      "headRepository": "ekr/draft-fossaceca-dult-finding",
+      "headRefName": "ekr_reflow",
+      "headRefOid": "a4265b7e5fc63985a602c3b9ac009cc3b80a3c8d",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
