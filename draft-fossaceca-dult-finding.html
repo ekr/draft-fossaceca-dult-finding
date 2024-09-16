@@ -17,10 +17,10 @@ tag to determine where their tag was most recently seen. This
 document defines the protocol by which devices report tags
 they have seen and by which owners look up their location. 
     " name="description">
-<meta content="xml2rfc 3.22.0" name="generator">
+<meta content="xml2rfc 3.23.0" name="generator">
 <meta content="draft-fossaceca-dult-finding-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.22.0
+  xml2rfc 3.23.0
     Python 3.12.3
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
@@ -31,7 +31,7 @@ they have seen and by which owners look up their location.
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.32.3
-    setuptools 69.5.1
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-fossaceca-dult-finding.xml" rel="alternate" type="application/rfc+xml">
@@ -1031,11 +1031,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Finding Tracking Tags</td>
-<td class="right">July 2024</td>
+<td class="right">September 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Fossaceca &amp; Rescorla</td>
-<td class="center">Expires 1 February 2025</td>
+<td class="center">Expires 20 March 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1048,12 +1048,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-fossaceca-dult-finding-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-07-31" class="published">31 July 2024</time>
+<time datetime="2024-09-16" class="published">16 September 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-02-01">1 February 2025</time></dd>
+<dd class="expires"><time datetime="2025-03-20">20 March 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1114,7 +1114,7 @@ they have seen and by which owners look up their location.<a href="#section-abst
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 February 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 March 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1284,7 +1284,8 @@ observe those payloads and if the payload is in a separated
 mode, reports its location to some central service ("Crowdsourced Network").<a href="#section-1-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-1-3.3">
-          <p id="section-1-3.3.1">The owner ("Owner Device") queries the central service ("Crowdsourced Network") for the location of their accessory.<a href="#section-1-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-3.3.1">The owner ("Owner Device") queries the central service
+("Crowdsourced Network") for the location of their accessory.<a href="#section-1-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-1-4">A naive implementation of this design exposes users to considerable
@@ -1324,11 +1325,14 @@ anything about the location of a given accessory.<a href="#section-1-7.1.1" clas
 </li>
       </ul>
 <p id="section-1-8">This document defines a cryptographic reporting and finding protocol
-which is intended to minimize these privacy risks. It is intended
-to work in concert with the requirements defined in
+which is intended to minimize these privacy risks. It is intended to
+work in concert with the requirements defined in
 <span>[<a href="#I-D.detecting-unwanted-location-trackers" class="cite xref">I-D.detecting-unwanted-location-trackers</a>]</span>, which facilitate
-detection of unwanted tracking tags. This protocol design is based on existing academic research surrounding the security and privacy of bluetooth location tracking accessories on the market today, as described in <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> and closely follows
-the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
+detection of unwanted tracking tags. This protocol design is based on
+existing academic research surrounding the security and privacy of
+bluetooth location tracking accessories on the market today, as
+described in <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> and closely follows the
+design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a href="#section-1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="motivations">
@@ -1341,24 +1345,46 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
         <h3 id="name-stalking-prevention">
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-stalking-prevention" class="section-name selfRef">Stalking Prevention</a>
         </h3>
-<p id="section-2.1-1">This work has been inspired by the negative security and privacy implications that were introduced by lightweight location tracking tags, and defined in part by <span>[<a href="#I-D.detecting-unwanted-location-trackers" class="cite xref">I-D.detecting-unwanted-location-trackers</a>]</span>. The full threat model is described in detail in <span>[<a href="#DultDoc4" class="cite xref">DultDoc4</a>]</span>, however, a significant element of the threat model lies in part with the security of the Crowdsourced Network, which will be discussed in detail here.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">In addition to its designed uses, the Crowdsourced Network also provided stalkers with a means to anonymously upload and download location reports from BLE trackers. Thus, this document outlines the requirements and responsibilities of the Crowdsourced Network to verify the authenticity of the participants, while also preserving user privacy.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-1">This work has been inspired by the negative security and privacy
+implications that were introduced by lightweight location tracking
+tags, and defined in part by
+<span>[<a href="#I-D.detecting-unwanted-location-trackers" class="cite xref">I-D.detecting-unwanted-location-trackers</a>]</span>. The full threat model
+is described in detail in <span>[<a href="#DultDoc4" class="cite xref">DultDoc4</a>]</span>, however, a significant element
+of the threat model lies in part with the security of the Crowdsourced
+Network, which will be discussed in detail here.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">In addition to its designed uses, the Crowdsourced Network also
+provided stalkers with a means to anonymously upload and download
+location reports from BLE trackers. Thus, this document outlines the
+requirements and responsibilities of the Crowdsourced Network to
+verify the authenticity of the participants, while also preserving
+user privacy.<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.1-3.1">
-            <p id="section-2.1-3.1.1">First, the Crowdsourced Network should to ensure that only authentic Finding Devices are sending reports to the Crowdsourced Network, and this should occur via an authenticated and encrypted channel. This will help prevent malicious actors from interfering with location reporting services.<a href="#section-2.1-3.1.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.1.1">First, the Crowdsourced Network should to ensure that only authentic
+Finding Devices are sending reports to the Crowdsourced Network, and
+this should occur via an authenticated and encrypted channel. This
+will help prevent malicious actors from interfering with location
+reporting services.<a href="#section-2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.2">
-            <p id="section-2.1-3.2.1">Second, the Crowdsourced Network should ensure that only authorized Owner Devices are able to download location reports, and this should occur via an authenticated and encrypted channel. This will prevent malicious actors from unauthorized access of location data.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.2.1">Second, the Crowdsourced Network should ensure that only authorized
+Owner Devices are able to download location reports, and this should
+occur via an authenticated and encrypted channel. This will prevent
+malicious actors from unauthorized access of location data.<a href="#section-2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.3">
-            <p id="section-2.1-3.3.1">Third, the Crowdsourced Network must follow basic security principles, such as storing location reports in an encrypted manner<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.3.1">Third, the Crowdsourced Network must follow basic security
+principles, such as storing location reports in an encrypted manner<a href="#section-2.1-3.3.1" class="pilcrow">¶</a></p>
 <p id="section-2.1-3.3.2"><em>(The benefits of this requirement are self explanatory.)</em><a href="#section-2.1-3.3.2" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.4">
-            <p id="section-2.1-3.4.1">Fourth, the Crowdsourced Network must validate that the accessory registered to an owner is valid.  This wil prevent malicious actors from leveraging counterfeit accessories.<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.4.1">Fourth, the Crowdsourced Network must validate that the accessory
+registered to an owner is valid.  This wil prevent malicious actors
+from leveraging counterfeit accessories.<a href="#section-2.1-3.4.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-2.1-3.5">
-            <p id="section-2.1-3.5.1">Fifth, users should should be able to opt-out of their devices participating in the Crowdsourced Network.<a href="#section-2.1-3.5.1" class="pilcrow">¶</a></p>
+            <p id="section-2.1-3.5.1">Fifth, users should should be able to opt-out of their devices
+participating in the Crowdsourced Network.<a href="#section-2.1-3.5.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -1368,24 +1394,41 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
         <h3 id="name-existing-protocols">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-existing-protocols" class="section-name selfRef">Existing Protocols</a>
         </h3>
-<p id="section-2.2-1">There are a variety of different products on the market today that leverage a Crowdsourced Network for location tracking. Currently, each manufacturer has designed its own implementation and product.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">There are a variety of different products on the market today that
+leverage a Crowdsourced Network for location tracking. Currently, each
+manufacturer has designed its own implementation and product.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2-2">These include:<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 <div id="apple-and-the-airtag-as-described-in-whotracks-and-heinrich">
 <section id="section-2.2.1">
           <h4 id="name-apple-and-the-airtag-as-des">
 <a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-apple-and-the-airtag-as-des" class="section-name selfRef">Apple and the AirTag, as described in <span class="cite xref">[WhoTracks]</span> and <span class="cite xref">[Heinrich]</span></a>
           </h4>
-<p id="section-2.2.1-1">AirTags leverage rotating P224 public keys that are sent out as advertisements from the AirTag accessories (<code>ACC</code>) to nearby "Finder Devices" (<code>FD</code>s) on the Crowdsourced Network (<code>CN</code>). This public key allows the Finder Device to encrypt its own location information and send it to the <code>CN</code>, and the owner device is able to independently generate te correct decryption keys and request the encrypted reports from the <code>CN</code>.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-1">AirTags leverage rotating P224 public keys that are sent out as
+advertisements from the AirTag accessories (<code>ACC</code>) to nearby "Finder
+Devices" (<code>FD</code>s) on the Crowdsourced Network (<code>CN</code>). This public key
+allows the Finder Device to encrypt its own location information and
+send it to the <code>CN</code>, and the owner device is able to independently
+generate te correct decryption keys and request the encrypted reports
+from the <code>CN</code>.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.2.1-2">The issues found with this implementation are the following:<a href="#section-2.2.1-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-3.1">
-              <p id="section-2.2.1-3.1.1">There is no authentication that occurs between the <code>ACC</code> and the <code>FD</code> on the network, so counterfeit <code>ACC</code>s are able to leverage <code>FD</code>s to upload location reports to Apple's on their behalf <code>CN</code> for any <code>ACC</code> mimicking the protocol. There should be authentication that prevents a rogue or non-conforming/counterfeit <code>ACC</code> from causing an <code>FD</code> to generate a location report.<a href="#section-2.2.1-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-3.1.1">There is no authentication that occurs between the <code>ACC</code> and the
+<code>FD</code> on the network, so counterfeit <code>ACC</code>s are able to leverage
+<code>FD</code>s to upload location reports to Apple's on their behalf <code>CN</code> for
+any <code>ACC</code> mimicking the protocol. There should be authentication
+that prevents a rogue or non-conforming/counterfeit <code>ACC</code> from
+causing an <code>FD</code> to generate a location report.<a href="#section-2.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-3.2">
-              <p id="section-2.2.1-3.2.1">There is no authentication that occurs between <code>FD</code> and <code>CN</code>, further verifying the validity that the report being uploaded is from an authentic <code>FD</code>, besides the fact that it is coming from a TLS protected, certificate pinned connection.<a href="#section-2.2.1-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-3.2.1">There is no authentication that occurs between <code>FD</code> and <code>CN</code>,
+further verifying the validity that the report being uploaded is
+from an authentic <code>FD</code>, besides the fact that it is coming from a
+TLS protected, certificate pinned connection.<a href="#section-2.2.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-3.3">
-              <p id="section-2.2.1-3.3.1">Anyone can download an encrypted report from Apple's <code>CN</code>, as shown in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span><a href="#section-2.2.1-3.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-3.3.1">Anyone can download an encrypted report from Apple's <code>CN</code>, as shown
+in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span><a href="#section-2.2.1-3.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1395,23 +1438,35 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
           <h4 id="name-samsung-and-the-smarttag-as">
 <a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-samsung-and-the-smarttag-as" class="section-name selfRef">Samsung and the SmartTag, as described in <span class="cite xref">[Samsung]</span></a>
           </h4>
-<p id="section-2.2.2-1">Each Samsung Smart Tags can advertise up to 51 different "private ids" that are tied to each specific <code>ACC</code> when they are outside of bluetooth range of the owner device. <code>FD</code>s are referred to as "online devices" or "helper devices", and these devices will send location reports to Samsung's <code>CN</code>, where there is an option to encrypt the location data.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">The issues found with this implementation, in addition to the issues described above are the following:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-1">Each Samsung Smart Tags can advertise up to 51 different "private ids"
+that are tied to each specific <code>ACC</code> when they are outside of
+bluetooth range of the owner device. <code>FD</code>s are referred to as "online
+devices" or "helper devices", and these devices will send location
+reports to Samsung's <code>CN</code>, where there is an option to encrypt the
+location data.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.2-2">The issues found with this implementation, in addition to the issues
+described above are the following:<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.2-3.1">
-              <p id="section-2.2.2-3.1.1">The privacy ids are easily enumerable, meaning that a stalker could permanently track a Smart Tag <code>ACC</code>.<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-3.1.1">The privacy ids are easily enumerable, meaning that a stalker could
+permanently track a Smart Tag <code>ACC</code>.<a href="#section-2.2.2-3.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.2-3.2">
-              <p id="section-2.2.2-3.2.1">The <code>CN</code> is easily susceptible to replay attacks from inauthentic <code>FD</code>s<a href="#section-2.2.2-3.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-3.2.1">The <code>CN</code> is easily susceptible to replay attacks from inauthentic
+<code>FD</code>s<a href="#section-2.2.2-3.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.2-3.3">
-              <p id="section-2.2.2-3.3.1">It is possible for an <code>ACC</code> to be impersonated and pair with the <code>OD</code>.<a href="#section-2.2.2-3.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-3.3.1">It is possible for an <code>ACC</code> to be impersonated and pair with the
+<code>OD</code>.<a href="#section-2.2.2-3.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.2-3.4">
-              <p id="section-2.2.2-3.4.1">There is sensitive, unique data that can be leaked by the GATT service used by an <code>FD</code> on an <code>ACC</code><a href="#section-2.2.2-3.4.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-3.4.1">There is sensitive, unique data that can be leaked by the GATT
+service used by an <code>FD</code> on an <code>ACC</code><a href="#section-2.2.2-3.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.2-3.5">
-              <p id="section-2.2.2-3.5.1">The <code>CN</code> (and therefore, Samsung) is able to trivially track <code>ACC</code> due to the sensitive information stored on the server (private device ID and location information)<a href="#section-2.2.2-3.5.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.2-3.5.1">The <code>CN</code> (and therefore, Samsung) is able to trivially track <code>ACC</code>
+due to the sensitive information stored on the server (private
+device ID and location information)<a href="#section-2.2.2-3.5.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1421,8 +1476,15 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
           <h4 id="name-tile-cube-chipolo-pebblebee">
 <a href="#section-2.2.3" class="section-number selfRef">2.2.3. </a><a href="#name-tile-cube-chipolo-pebblebee" class="section-name selfRef">Tile, CUBE, Chipolo, Pebblebee and TrackR as described in <span class="cite xref">[GMCKV21]</span></a>
           </h4>
-<p id="section-2.2.3-1">These <code>CN</code>s are somewhat similar to each other because they all leverage apps to create their <code>CN</code>, rather than being built into the device operating system, as with Apple and Samsung. Because of this, it is a significant drawback for their <code>CN</code> network as participation of <code>FD</code>s is severely limited. However, there are certain security problems with this network that are important to discuss.<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.3-2">Specifically, the authors identified various "security properties" that they believe to be an ideal <code>CN</code> benchmark, and defined those eight properties as follows:<a href="#section-2.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-1">These <code>CN</code>s are somewhat similar to each other because they all
+leverage apps to create their <code>CN</code>, rather than being built into the
+device operating system, as with Apple and Samsung. Because of this,
+it is a significant drawback for their <code>CN</code> network as participation
+of <code>FD</code>s is severely limited. However, there are certain security
+problems with this network that are important to discuss.<a href="#section-2.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-2">Specifically, the authors identified various "security properties"
+that they believe to be an ideal <code>CN</code> benchmark, and defined those
+eight properties as follows:<a href="#section-2.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-2.2.3-3"><em>(Definitions from <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span>)</em><a href="#section-2.2.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3-4.1">
@@ -1450,16 +1512,25 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
               <p id="section-2.2.3-4.8.1"><em>It must be impossible to spoof the <code>CN</code></em><a href="#section-2.2.3-4.8.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<p id="section-2.2.3-5">Their research then evaluated these existing <code>CN</code>s based on the benchmark they designed. The issues discovered were:<a href="#section-2.2.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.2.3-5">Their research then evaluated these existing <code>CN</code>s based on the
+benchmark they designed. The issues discovered were:<a href="#section-2.2.3-5" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.3-6.1">
-              <p id="section-2.2.3-6.1.1">The TrackR, CUBE, Chipolo, and Pebblebee all allow for an <code>OD</code> to register an <code>ACC</code> with the <code>CN</code> without requiring any physical access to the <code>ACC</code> because the pairing/ registration process is too simplistic and only relies on the MAC address (or another static ID) of the device, which allows anyone to register as the owner of any arbitrary <code>ACC</code>.<a href="#section-2.2.3-6.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-6.1.1">The TrackR, CUBE, Chipolo, and Pebblebee all allow for an <code>OD</code> to
+register an <code>ACC</code> with the <code>CN</code> without requiring any physical
+access to the <code>ACC</code> because the pairing/ registration process is too
+simplistic and only relies on the MAC address (or another static ID)
+of the device, which allows anyone to register as the owner of any
+arbitrary <code>ACC</code>.<a href="#section-2.2.3-6.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.3-6.2">
-              <p id="section-2.2.3-6.2.1">All of the of the <code>CN</code>s (except for Tile) simply track <code>ACC</code>s with static identifiers of the device so like the Samsung network, the <code>CN</code>s can track arbitrary <code>ACC</code> locations<a href="#section-2.2.3-6.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-6.2.1">All of the of the <code>CN</code>s (except for Tile) simply track <code>ACC</code>s with
+static identifiers of the device so like the Samsung network, the
+<code>CN</code>s can track arbitrary <code>ACC</code> locations<a href="#section-2.2.3-6.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.3-6.3">
-              <p id="section-2.2.3-6.3.1">Most of the <code>CN</code>s blindly trust received location reports from <code>FD</code>s without verifying physical proximity to the <code>ACC</code>.<a href="#section-2.2.3-6.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.3-6.3.1">Most of the <code>CN</code>s blindly trust received location reports from <code>FD</code>s
+without verifying physical proximity to the <code>ACC</code>.<a href="#section-2.2.3-6.3.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1471,7 +1542,9 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
         <h3 id="name-prior-research">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-prior-research" class="section-name selfRef">Prior Research</a>
         </h3>
-<p id="section-2.3-1">There is substantial research into stalking via the FindMy protocol and overall crowdsourced network protocol deficiencies have been described in multiple bodies of work, such as:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">There is substantial research into stalking via the FindMy protocol
+and overall crowdsourced network protocol deficiencies have been
+described in multiple bodies of work, such as:<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.3-2.1">
             <p id="section-2.3-2.1.1"><span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span><a href="#section-2.3-2.1.1" class="pilcrow">¶</a></p>
@@ -1490,9 +1563,25 @@ the design of <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span>.<a
 </li>
         </ul>
 <p id="section-2.3-3">and others.<a href="#section-2.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.3-4">There are some suggested improvements, such as the security properties described in <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> above.  The authors of <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> also suggested fusing a private key into the <code>ACC</code> to make it more difficult to spoof, and requiring that location updates be signed.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.3-5"><span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span> and <span>[<a href="#WhoTracks" class="cite xref">WhoTracks</a>]</span> pointed out early deficiencies in the protocol, which <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> set out to solve. By introducing a Blind Signature scheme, the authors sought to overcome an attacker leveraging a large amount of keys to avoid triggering the anti-tracking framework.  In this implementation, keys were predetermined for a set interval, and signed by the server, such that a specific, presigned key can only be used during a pre-determined interval. The drawback of this approach is that the authentication is left to the <code>OD</code> and the <code>CN</code>, and the <code>CN</code> does not do any authentication with the <code>FD</code>, so it still could store forged location reports. Additionally, the <code>FD</code> does not do any authentication with the <code>ACC</code>, which means that it could potentially interact with counterfeit <code>ACC</code> devices.<a href="#section-2.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.3-6"><span>[<a href="#Beck" class="cite xref">Beck</a>]</span> introduces the idea of Multi-Dealer Secret Sharing (MDSS) as a privacy preserving protocol that should also be considered.<a href="#section-2.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.3-4">There are some suggested improvements, such as the security properties
+described in <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> above.  The authors of <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span> also
+suggested fusing a private key into the <code>ACC</code> to make it more difficul
+t to spoof, and requiring that location updates be signed.<a href="#section-2.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3-5"><span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span> and <span>[<a href="#WhoTracks" class="cite xref">WhoTracks</a>]</span> pointed out early deficiencies in the
+protocol, which <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> set out to solve. By introducing a Blind
+Signature scheme, the authors sought to overcome an attacker
+leveraging a large amount of keys to avoid triggering the
+anti-tracking framework.  In this implementation, keys were
+predetermined for a set interval, and signed by the server, such that
+a specific, presigned key can only be used during a pre-determined
+interval. The drawback of this approach is that the authentication is
+left to the <code>OD</code> and the <code>CN</code>, and the <code>CN</code> does not do any
+authentication with the <code>FD</code>, so it still could store forged location
+reports. Additionally, the <code>FD</code> does not do any authentication with
+the <code>ACC</code>, which means that it could potentially interact with
+counterfeit <code>ACC</code> devices.<a href="#section-2.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.3-6"><span>[<a href="#Beck" class="cite xref">Beck</a>]</span> introduces the idea of Multi-Dealer Secret Sharing (MDSS) as
+a privacy preserving protocol that should also be considered.<a href="#section-2.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1508,11 +1597,22 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Section 1.2 of <span>[<a href="#I-D.detecting-unwanted-location-trackers" class="cite xref">I-D.detecting-unwanted-location-trackers</a>]</span> provides
 definitions of the various system components.<a href="#section-3-2" class="pilcrow">¶</a></p>
-<p id="section-3-3">Accessory (ACC): This is the device which will be tracked. It is assumed to lack direct internet access and GPS, but will possess Bluetooth Low Energy capabilities, which it uses to send advertisement messages. The accessory protocol is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">Advertisement: This is the message that is sent over the BLE Protocol from the Accessory<a href="#section-3-4" class="pilcrow">¶</a></p>
-<p id="section-3-5">Crowdsourced Network (CN): This is the network that provides the location reporting upload and download services for Owner Devices and Finder Devices.<a href="#section-3-5" class="pilcrow">¶</a></p>
-<p id="section-3-6">Finder Device (FD): This is a device that is a non-owner device that contributes information about an accessory to the crowdsourced network.<a href="#section-3-6" class="pilcrow">¶</a></p>
-<p id="section-3-7">Owner Device (OD): This is the device which owns the accessory, and to which it is paired. There can be multiple owner devices, however, the security of that implementation is outside of the scope of this document.<a href="#section-3-7" class="pilcrow">¶</a></p>
+<p id="section-3-3">Accessory (ACC): This is the device which will be tracked. It is
+assumed to lack direct internet access and GPS, but will possess
+Bluetooth Low Energy capabilities, which it uses to send advertisement
+messages. The accessory protocol is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">Advertisement: This is the message that is sent over the BLE Protocol
+from the Accessory<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">Crowdsourced Network (CN): This is the network that provides the
+location reporting upload and download services for Owner Devices and
+Finder Devices.<a href="#section-3-5" class="pilcrow">¶</a></p>
+<p id="section-3-6">Finder Device (FD): This is a device that is a non-owner device that
+contributes information about an accessory to the crowdsourced
+network.<a href="#section-3-6" class="pilcrow">¶</a></p>
+<p id="section-3-7">Owner Device (OD): This is the device which owns the accessory, and to
+which it is paired. There can be multiple owner devices, however, the
+security of that implementation is outside of the scope of this
+document.<a href="#section-3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="protocol-overview">
@@ -1716,19 +1816,35 @@ spatially separated devices to reduce the per-device cost.
         <h3 id="name-system-stages">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-system-stages" class="section-name selfRef">System Stages</a>
         </h3>
-<p id="section-5.1-1">The there are 5 stages that will be outlined, taking into account elements from both <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span>.  These stages are as follows:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">The there are 5 stages that will be outlined, taking into account
+elements from both <span>[<a href="#BlindMy" class="cite xref">BlindMy</a>]</span> and <span>[<a href="#GMCKV21" class="cite xref">GMCKV21</a>]</span>.  These stages are as
+follows:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">1) <strong>Initial Pairing / Accessory Setup</strong><a href="#section-5.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.1-3">In this phase, the Accessory <code>ACC</code> is paired with the Owner Device <code>OD</code>, and verified as authentic with the Crowdsourced Network <code>CN</code><a href="#section-5.1-3" class="pilcrow">¶</a></p>
+<p id="section-5.1-3">In this phase, the Accessory <code>ACC</code> is paired with the Owner Device
+<code>OD</code>, and verified as authentic with the Crowdsourced Network <code>CN</code><a href="#section-5.1-3" class="pilcrow">¶</a></p>
 <p id="section-5.1-4">2) <strong>Accessory in Nearby Owner Mode</strong><a href="#section-5.1-4" class="pilcrow">¶</a></p>
-<p id="section-5.1-5">In this phase, the Accessory <code>ACC</code> is within Bluetooth range of the Owner Device <code>OD</code>. In this phase, Finder Devices <code>FDs</code> <span class="bcp14">SHALL NOT</span> generate location reports to send to the Crowdsourced Network <code>CN</code>. The Accessory <span class="bcp14">SHALL</span> behave as defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>. [[OPEN ISSUE: Need to make sure that walking around with an AirTag in Nearby Mode does not allow for stalking]]<a href="#section-5.1-5" class="pilcrow">¶</a></p>
+<p id="section-5.1-5">In this phase, the Accessory <code>ACC</code> is within Bluetooth range of the
+Owner Device <code>OD</code>. In this phase, Finder Devices <code>FDs</code> <span class="bcp14">SHALL NOT</span>
+generate location reports to send to the Crowdsourced Network
+<code>CN</code>. The Accessory <span class="bcp14">SHALL</span> behave as defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>. [[OPEN
+ISSUE: Need to make sure that walking around with an AirTag in Nearby
+Mode does not allow for stalking]]<a href="#section-5.1-5" class="pilcrow">¶</a></p>
 <p id="section-5.1-6">3) <strong>Accessory in Separated (Lost) Mode</strong><a href="#section-5.1-6" class="pilcrow">¶</a></p>
-<p id="section-5.1-7">In this phase, the Accessory <code>ACC</code> is not within Bluetooth raange fo the Owner Device <code>OD</code>, therefore, the accessory must generate "lost" messages to be received by Finder Devices <code>FD</code>, as described in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
+<p id="section-5.1-7">In this phase, the Accessory <code>ACC</code> is not within Bluetooth raange fo
+the Owner Device <code>OD</code>, therefore, the accessory must generate "lost"
+messages to be received by Finder Devices <code>FD</code>, as described in
+<span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.1-7" class="pilcrow">¶</a></p>
 <p id="section-5.1-8">4) <strong>Finder Device creates a location report</strong><a href="#section-5.1-8" class="pilcrow">¶</a></p>
-<p id="section-5.1-9">Finder Device <code>FD</code> receives a Bluetooth packet, and uploads a location report to the Crowdsourced Network <code>CN</code> if and only if it is confirmed to be a valid location report.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
-<p id="section-5.1-10">[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or Both?]]<a href="#section-5.1-10" class="pilcrow">¶</a></p>
-<p id="section-5.1-11">[[OPEN ISSUE: Should there be auth between <code>FD</code> and <code>ACC</code> as well as <code>FD</code> and <code>CN</code>]]<a href="#section-5.1-11" class="pilcrow">¶</a></p>
+<p id="section-5.1-9">Finder Device <code>FD</code> receives a Bluetooth packet, and uploads a location
+report to the Crowdsourced Network <code>CN</code> if and only if it is confirmed
+to be a valid location report.<a href="#section-5.1-9" class="pilcrow">¶</a></p>
+<p id="section-5.1-10">[[OPEN ISSUE: Should this be confirmed by the FD, or the CN? or
+Both?]]<a href="#section-5.1-10" class="pilcrow">¶</a></p>
+<p id="section-5.1-11">[[OPEN ISSUE: Should there be auth between <code>FD</code> and <code>ACC</code> as well as
+<code>FD</code> and <code>CN</code>]]<a href="#section-5.1-11" class="pilcrow">¶</a></p>
 <p id="section-5.1-12">5) <strong>Owner Device queries the Crowdsourced Network</strong><a href="#section-5.1-12" class="pilcrow">¶</a></p>
-<p id="section-5.1-13">Owner Device <code>OD</code> queries the Crowdsourced Network <code>CN</code> for the encrypted location report.<a href="#section-5.1-13" class="pilcrow">¶</a></p>
+<p id="section-5.1-13">Owner Device <code>OD</code> queries the Crowdsourced Network <code>CN</code> for the
+encrypted location report.<a href="#section-5.1-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="partial-blind-signature-scheme">
@@ -1873,7 +1989,8 @@ to the <code>ACC</code>. Note that <code>ACC</code> does not need a copy of the 
           <h4 id="name-accessory-in-nearby-owner-m">
 <a href="#section-5.3.3" class="section-number selfRef">5.3.3. </a><a href="#name-accessory-in-nearby-owner-m" class="section-name selfRef">Accessory in Nearby Owner Mode</a>
           </h4>
-<p id="section-5.3.3-1">After pairing, when the Accessory <code>ACC</code> is in Bluetooth range of <code>OD</code>, it will follow the protocol as decribed in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.3-1">After pairing, when the Accessory <code>ACC</code> is in Bluetooth range of <code>OD</code>,
+it will follow the protocol as decribed in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.3.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="accessory-in-separated-lost-mode">
@@ -1881,7 +1998,9 @@ to the <code>ACC</code>. Note that <code>ACC</code> does not need a copy of the 
           <h4 id="name-accessory-in-separated-lost">
 <a href="#section-5.3.4" class="section-number selfRef">5.3.4. </a><a href="#name-accessory-in-separated-lost" class="section-name selfRef">Accessory in Separated (Lost) Mode</a>
           </h4>
-<p id="section-5.3.4-1">After pairing, when the Accessory <code>ACC</code> no longer in the Bluetooth range of <code>OD</code>, it will follow the protocol as decribed below:, which should correspond to the behavior outlined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>:<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.3.4-1">After pairing, when the Accessory <code>ACC</code> no longer in the Bluetooth
+range of <code>OD</code>, it will follow the protocol as decribed below:, which
+should correspond to the behavior outlined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>:<a href="#section-5.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.4-2"><code>ACC</code> periodically sends out an Advertisement which contains the then
 current ephemeral public key <code>Y_i</code>. The full payload format of the
 Advertisement is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc3</a>]</span>.<a href="#section-5.3.4-2" class="pilcrow">¶</a></p>
@@ -1894,14 +2013,19 @@ Advertisement is defined in <span>[<a href="#DultDoc3" class="cite xref">DultDoc
         <h3 id="name-finder-device-creates-a-loc">
 <a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-finder-device-creates-a-loc" class="section-name selfRef">Finder Device creates a Location Report</a>
         </h3>
-<p id="section-5.4-1">The Finder Device <code>FD</code> receives the advertisement via Bluetooth. <code>FD</code> should have a mechanism by which to authenticate that this is a valid public key with <code>CN</code>. *<a href="#section-5.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.4-2">In order to report an accessory's location at time <code>i</code>, <code>FD</code> extracts the elliptic curve public key from the advertisement, and records it own location data, a timestamp, and a confidence value as described in <span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.4-3"><code>FD</code> performs ECDH with the public key  <code>Y</code><sub>i</sub> and uses it to encrypt the
-location data using HPKE Seal <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span>. It sends the result to the CN along with
-the hash of the current public key and the current time.
-[[OPEN ISSUE: Should we work in terms of hashes or the public
-keys. What we send has to be what's looked up.]]. <code>CN</code> stores the resulting
-values indexed under the hash of the public key.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
+<p id="section-5.4-1">The Finder Device <code>FD</code> receives the advertisement via Bluetooth. <code>FD</code>
+should have a mechanism by which to authenticate that this is a valid
+public key with <code>CN</code>. *<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">In order to report an accessory's location at time <code>i</code>, <code>FD</code> extracts
+the elliptic curve public key from the advertisement, and records it
+own location data, a timestamp, and a confidence value as described in
+<span>[<a href="#Heinrich" class="cite xref">Heinrich</a>]</span>.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.4-3"><code>FD</code> performs ECDH with the public key <code>Y</code><sub>i</sub> and uses it to
+encrypt the location data using HPKE Seal <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span>. It sends the
+result to the CN along with the hash of the current public key and the
+current time.  [[OPEN ISSUE: Should we work in terms of hashes or the
+public keys. What we send has to be what's looked up.]]. <code>CN</code> stores
+the resulting values indexed under the hash of the public key.<a href="#section-5.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="owner-device-queries-the-crowdsourced-network">

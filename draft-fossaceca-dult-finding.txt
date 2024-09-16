@@ -5,8 +5,8 @@
 Detecting Unwanted Location Trackers                        C. Fossaceca
 Internet-Draft                                                 Microsoft
 Intended status: Informational                               E. Rescorla
-Expires: 1 February 2025                         Windy Hill Systems, LLC
-                                                            31 July 2024
+Expires: 20 March 2025                           Windy Hill Systems, LLC
+                                                       16 September 2024
 
 
                          Finding Tracking Tags
@@ -57,7 +57,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 February 2025.
+   This Internet-Draft will expire on 20 March 2025.
 
 Copyright Notice
 
@@ -357,7 +357,7 @@ Table of Contents
    There are some suggested improvements, such as the security
    properties described in [GMCKV21] above.  The authors of [GMCKV21]
    also suggested fusing a private key into the ACC to make it more
-   difficult to spoof, and requiring that location updates be signed.
+   difficul t to spoof, and requiring that location updates be signed.
 
    [Heinrich] and [WhoTracks] pointed out early deficiencies in the
    protocol, which [BlindMy] set out to solve.  By introducing a Blind
