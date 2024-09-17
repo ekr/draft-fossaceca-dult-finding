@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-15T00:27:08.132962+00:00",
+  "timestamp": "2024-09-17T00:20:25.757781+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -321,24 +321,26 @@
       "id": "PR_kwDOLlgmts53Vwxt",
       "title": "Reflow long lines",
       "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/10",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ekr",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "I find it a lot easier to work with short lines. This has no substantive changes.",
       "createdAt": "2024-08-03T17:52:28Z",
-      "updatedAt": "2024-08-03T17:52:28Z",
+      "updatedAt": "2024-09-16T19:31:07Z",
       "baseRepository": "ekr/draft-fossaceca-dult-finding",
       "baseRefName": "main",
       "baseRefOid": "72eb3bfa4e487f9b887a25ba9d57380550349d73",
       "headRepository": "ekr/draft-fossaceca-dult-finding",
       "headRefName": "ekr_reflow",
       "headRefOid": "a4265b7e5fc63985a602c3b9ac009cc3b80a3c8d",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-09-16T19:31:07Z",
+      "mergedAt": "2024-09-16T19:31:07Z",
+      "mergedBy": "cfossace",
+      "mergeCommit": {
+        "oid": "1079814d580ac1de67d4cfe7c751da8479a8e39f"
+      },
       "comments": [],
       "reviews": []
     }
