@@ -26,7 +26,7 @@ author:
 
  -
     fullname: "Eric Rescorla"
-    organization: Windy Hill Systems, LLC
+    organization: Independent
     email: "ekr@rtfm.com"
 
 normative:
@@ -205,7 +205,7 @@ privacy risk. In particular:
   and thus track them by tracking their "own" accessory.
 
 
-{{security-considerations}} provides more detailed definition of the
+{{security-considerations}} provides a more detailed description of the
 desired security privacy properties, but briefly, we would like to
 have a system in which:
 
@@ -243,13 +243,13 @@ of the threat model lies in part with the security of the Crowdsourced
 Network, which will be discussed in detail here.
 
 In addition to its designed uses, the Crowdsourced Network also
-provided stalkers with a means to anonymously upload and download
-location reports from BLE trackers. Thus, this document outlines the
-requirements and responsibilities of the Crowdsourced Network to
-verify the authenticity of the participants, while also preserving
-user privacy.
+provided stalkers with a means to track others by planting a tracking
+tag on them and then using the CN to locate the tracker.  Thus, this
+document outlines the requirements and responsibilities of the
+Crowdsourced Network to verify the authenticity of the participants,
+while also preserving user privacy.
 
-- First, the Crowdsourced Network should to ensure that only authentic
+- First, the Crowdsourced Network should nsure that only authentic
   Finding Devices are sending reports to the Crowdsourced Network, and
   this should occur via an authenticated and encrypted channel. This
   will help prevent malicious actors from interfering with location
