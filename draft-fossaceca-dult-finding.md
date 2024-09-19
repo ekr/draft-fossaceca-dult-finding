@@ -249,7 +249,7 @@ document outlines the requirements and responsibilities of the
 Crowdsourced Network to verify the authenticity of the participants,
 while also preserving user privacy.
 
-- First, the Crowdsourced Network should nsure that only authentic
+- First, the Crowdsourced Network should ensure that only authentic
   Finding Devices are sending reports to the Crowdsourced Network, and
   this should occur via an authenticated and encrypted channel. This
   will help prevent malicious actors from interfering with location
