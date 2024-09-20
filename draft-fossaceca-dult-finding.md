@@ -177,7 +177,7 @@ an "implementation draft" for testing and interop purposes.
 Lightweight location tracking tags are a mechanism by which users can track their personal items. These tags function as a component of a crowdsourced
 tracking network in which devices belonging to other network users
 (e.g., phones) report on the location of tags they have seen.
-At a high level, this works as follows:
+At a high level, location tracking this works as follows:
 
 - Tags ("Accessories") broadcast an advertisement payload containing
   accessory-specific information. The payload also indicates whether
@@ -189,6 +189,7 @@ At a high level, this works as follows:
 
 - The owner ("Owner Device") queries the central service
   ("Crowdsourced Network") for the location of their accessory.
+
 
 A naive implementation of this design exposes users to considerable
 privacy risk. In particular:
@@ -218,8 +219,13 @@ anything about the location of a given accessory.
 
 - It is not possible for unverified accessories to use the crowdsourced network protocol.
 
+A number of manufacturers have developed their own proprietary tracking
+protocols, including Apple (see {{WhoTracks}} and {{Heinrich}}),
+Samsung (see {{Samsung}}), and Tile, CUBE, Chipolo, Pebblebee and TrackR (see {{GMCKV21}}),
+with varying security and privacy properties.
+
 This document defines a cryptographic reporting and finding protocol
-which is intended to minimize these privacy risks. It is intended to
+which is intended to minimize the above privacy risks. It is intended to
 work in concert with the requirements defined in
 {{!I-D.detecting-unwanted-location-trackers}}, which facilitate
 detection of unwanted tracking tags. This protocol design is based on
@@ -292,8 +298,8 @@ and others.
 
 There are some suggested improvements, such as the security properties
 described in {{GMCKV21}} above.  The authors of {{GMCKV21}} also
-suggested fusing a private key into the `ACC` to make it more difficul
-t to spoof, and requiring that location updates be signed.
+suggested fusing a private key into the `ACC` to make it more difficult
+to spoof, and requiring that location updates be signed.
 
 {{Heinrich}} and {{WhoTracks}} pointed out early deficiencies in the
 protocol, which {{BlindMy}} set out to solve. By introducing a Blind
@@ -745,7 +751,7 @@ thus recovering the location data for report.
 TODO Security - as described in {{DultDoc4}}?.
 This section still mostly needs to be written.
 
-### Effectiveness of Rate Limiting via Blind Signatures
+## Effectiveness of Rate Limiting via Blind Signatures
 
 The blind signature mechanism described here (adapted from
 {{BlindMy}}) helps to limit the damage of noncompliant devices.
