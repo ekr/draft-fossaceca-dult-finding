@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-29T00:27:55.791796+00:00",
+  "timestamp": "2024-10-01T00:28:06.040587+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -349,24 +349,26 @@
       "id": "PR_kwDOLlgmts57-i0k",
       "title": "Editorial fixes and remove existing protocol discussion",
       "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/11",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "ekr",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-09-19T03:58:44Z",
-      "updatedAt": "2024-09-20T15:07:15Z",
+      "updatedAt": "2024-09-29T15:08:57Z",
       "baseRepository": "ekr/draft-fossaceca-dult-finding",
       "baseRefName": "main",
       "baseRefOid": "1079814d580ac1de67d4cfe7c751da8479a8e39f",
       "headRepository": "ekr/draft-fossaceca-dult-finding",
       "headRefName": "ekr_pre_00",
       "headRefOid": "b0cc60c936caa3e7f9e80929e22fab824c5f9e52",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-09-29T15:08:57Z",
+      "mergedAt": "2024-09-29T15:08:57Z",
+      "mergedBy": "ekr",
+      "mergeCommit": {
+        "oid": "8d6b3ff96d9dbeb64d1d49e1c0411cc1ad010379"
+      },
       "comments": [],
       "reviews": []
     }
