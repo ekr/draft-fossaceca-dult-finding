@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-01T00:28:06.040587+00:00",
+  "timestamp": "2024-10-03T00:24:57.514378+00:00",
   "repo": "ekr/draft-fossaceca-dult-finding",
   "labels": [
     {
@@ -369,6 +369,32 @@
       "mergeCommit": {
         "oid": "8d6b3ff96d9dbeb64d1d49e1c0411cc1ad010379"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 12,
+      "id": "PR_kwDOLlgmts59UYf4",
+      "title": "Make Standards Track",
+      "url": "https://github.com/ekr/draft-fossaceca-dult-finding/pull/12",
+      "state": "OPEN",
+      "author": "seanturner",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I-D should be Standards Track.",
+      "createdAt": "2024-10-02T00:32:50Z",
+      "updatedAt": "2024-10-02T00:32:51Z",
+      "baseRepository": "ekr/draft-fossaceca-dult-finding",
+      "baseRefName": "main",
+      "baseRefOid": "a34ab36880de282d7f736b95520521673be0f643",
+      "headRepository": "seanturner/draft-fossaceca-dult-finding",
+      "headRefName": "patch-1",
+      "headRefOid": "3145e019dcc01e5162dbf4f2137673b962fd5edc",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
